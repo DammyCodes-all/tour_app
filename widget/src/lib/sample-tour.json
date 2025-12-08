@@ -1,0 +1,12 @@
+{
+  "title": "Sample Tour",
+  "steps": [
+    { "id": "header", "selector": "#header", "text": "This is the header." },
+    {
+      "id": "create",
+      "selector": ".create-btn",
+      "text": "Click here to create."
+    },
+    { "id": "sidebar", "selector": "#sidebar", "text": "Use this menu." }
+  ]
+}
