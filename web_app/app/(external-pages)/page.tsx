@@ -1,6 +1,9 @@
 
 import { ArrowRight, File, Check, Zap, Users, Target, BarChart, Play } from 'lucide-react';
 import Link from 'next/link';
+import RotatingText from '../components/animations/rotating-text/RotatingText';
+import DecryptedText from '../components/animations/decrypted-text/DecryptedText';
+import TrustedBySection from '../components/trusted-by/TrustedBySection';
 
 export default function LandingPage() {
   return (
@@ -11,16 +14,32 @@ export default function LandingPage() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-8">
               <div className="inline-block">
-                <span className="bg-custom-orange/10 text-custom-orange px-4 py-2 rounded-full text-sm font-medium">
-                  Product Onboarding Made Simple
-                </span>
+                <DecryptedText
+                  text=" Product Onboarding Made Simple"
+                  speed={90}
+                  maxIterations={20}
+                  characters="ABCD1234!?"
+                  className="revealed"
+                  parentClassName="all-letters bg-custom-orange/10 text-custom-orange px-4 py-2 rounded-full text-sm font-medium"
+                  encryptedClassName="encrypted"
+                  animateOn="view"
+                />
               </div>
 
               <h1 className="text-xl sm:text-3xl lg:text-4xl font-bold leading-tight">
                 Drive Product Growth with
-                <span className="block text-custom-orange mt-2">
-                  Guided Tours
-                </span>
+                <RotatingText
+                  texts={['Guided Tours', 'Walkthroughs', 'Discovery!']}
+                  mainClassName="text-custom-orange text-black overflow-hidden py-0.5 sm:py-1 md:py-2 justify-start rounded-lg"
+                  staggerFrom={"last"}
+                  initial={{ y: "100%" }}
+                  animate={{ y: 0 }}
+                  exit={{ y: "-120%" }}
+                  staggerDuration={0.035}
+                  splitLevelClassName="overflow-hidden pb-0.5 sm:pb-1 md:pb-1"
+                  transition={{ type: "spring", damping: 30, stiffness: 400 }}
+                  rotationInterval={3500}
+                />
               </h1>
 
               <p className="text-lg text-gray-400 leading-relaxed">
@@ -38,6 +57,7 @@ export default function LandingPage() {
                   Docs
                 </Link>
               </div>
+
             </div>
 
             {/* Hero Image/Demo */}
@@ -83,34 +103,7 @@ export default function LandingPage() {
       </section>
 
       {/* Trusted By Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 border-t border-custom-gray">
-        <div className="max-w-7xl mx-auto">
-          <p className="text-center lg:text-lg text-gray-500 text-sm mb-8 uppercase tracking-wider">
-            Trusted by Leading Companies
-          </p>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 items-center justify-items-center opacity-80 mt-3 md:mt-7">
-            {['Amazon', 'Meta', 'Microsoft', 'Apple', 'IBM', 'Google'].map((company, i) => (
-              <div key={i} className="text-custom-orange font-bold text-lg hover:text-gray-600 hover:text-xl">{company}</div>
-            ))}
-          </div>
-        </div>
-          <div className="flex flex-wrap items-center justify-center md:justify-between gap-3 md:gap-5 mt-20 max-w-7xl mx-auto">
-            <div>
-              <p className="text-2xl font-bold mb-1.5">1,000+</p>
-              <p className="text-sm text-gray-400">Active Companies</p>
-            </div>
-            <div className="h-12 w-px bg-gray-700"></div>
-            <div>
-              <p className="text-2xl font-bold mb-1.5">10M+</p>
-              <p className="text-sm text-gray-400">Tours Completed</p>
-            </div>
-            <div className="h-12 w-px bg-gray-700"></div>
-            <div>
-              <p className="text-2xl font-bold mb-1.5">95%</p>
-              <p className="text-sm text-gray-400">Satisfaction</p>
-            </div>
-          </div>
-      </section>
+        <TrustedBySection />
 
       {/* Features Section */}
       <section id="features" className="py-24 px-4 sm:px-6 lg:px-8">
