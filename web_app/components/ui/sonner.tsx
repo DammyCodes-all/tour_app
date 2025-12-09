@@ -16,31 +16,13 @@ const Toaster = ({ ...props }: ToasterProps) => {
   return (
     <Sonner
       theme={theme as ToasterProps["theme"]}
-      className="toaster group"
+      className="toaster group ring ring-custom-orange"
       icons={{
         success: <CircleCheckIcon className="size-4" />,
         info: <InfoIcon className="size-4" />,
         warning: <TriangleAlertIcon className="size-4" />,
         error: <OctagonXIcon className="size-4" />,
         loading: <Loader2Icon className="size-4 animate-spin" />,
-      }}
-      toastOptions={{
-        classNames: {
-          toast: "group toast group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg",
-          description: "group-[.toast]:text-muted-foreground",
-          actionButton:
-            "group-[.toast]:bg-primary group-[.toast]:text-primary-foreground",
-          cancelButton:
-            "group-[.toast]:bg-muted group-[.toast]:text-muted-foreground",
-          success:
-            "group-[.toast]:bg-green-500 group-[.toast]:text-white",
-          error:
-            "group-[.toast]:bg-red-500 group-[.toast]:text-white",
-          info:
-            "group-[.toast]:bg-blue-500 group-[.toast]:text-white",
-          warning:
-            "group-[.toast]:bg-yellow-500 group-[.toast]:text-white",
-        },
       }}
       style={
         {
@@ -52,7 +34,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
       }
       {...props}
     />
-  )
-}
+  );
+};
 
-export { Toaster }
+export { Toaster };

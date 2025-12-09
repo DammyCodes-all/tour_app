@@ -1,8 +1,17 @@
+import {
+  ArrowRight,
+  File,
+  Check,
+  Zap,
+  Users,
+  Target,
+  BarChart,
+  Play,
+} from "lucide-react";
+import Link from "next/link";
+// import { createClient } from "@/lib/supabase/server";
 
-import { ArrowRight, File, Check, Zap, Users, Target, BarChart, Play } from 'lucide-react';
-import Link from 'next/link';
-
-export default function LandingPage() {
+export default async function LandingPage() {
   return (
     <div className="min-h-screen bg-custom-black text-white font-sans">
       {/* Hero Section */}
@@ -24,16 +33,26 @@ export default function LandingPage() {
               </h1>
 
               <p className="text-lg text-gray-400 leading-relaxed">
-                Create interactive product tours that help users discover value faster.
-                Increase activation, boost engagement, and reduce support tickets.
+                Create interactive product tours that help users discover value
+                faster. Increase activation, boost engagement, and reduce
+                support tickets.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link href={"/get-started"} className="bg-custom-orange text-white px-8 py-4 rounded hover:bg-custom-orange-dark transition-all font-medium flex items-center justify-center gap-2 group">
+                <Link
+                  href={"/get-started"}
+                  className="bg-custom-orange text-white px-8 py-4 rounded hover:bg-custom-orange-dark transition-all font-medium flex items-center justify-center gap-2 group"
+                >
                   Get Started for Free
-                  <ArrowRight className="group-hover:translate-x-1 transition-transform" size={20} />
+                  <ArrowRight
+                    className="group-hover:translate-x-1 transition-transform"
+                    size={20}
+                  />
                 </Link>
-                <Link href={"/documentation"} className="border border-gray-600 text-white px-8 py-4 rounded hover:border-custom-orange hover:text-custom-orange transition-all font-medium flex items-center justify-center gap-2">
+                <Link
+                  href={"/documentation"}
+                  className="border border-gray-600 text-white px-8 py-4 rounded hover:border-custom-orange hover:text-custom-orange transition-all font-medium flex items-center justify-center gap-2"
+                >
                   <File size={20} />
                   Docs
                 </Link>
@@ -59,8 +78,13 @@ export default function LandingPage() {
                           <Zap size={20} />
                         </div>
                         <div className="flex-1">
-                          <p className="font-medium mb-1">Welcome to Tourify!</p>
-                          <p className="text-sm text-gray-400">Let's get you started with a quick tour of the key features.</p>
+                          <p className="font-medium mb-1">
+                            Welcome to Tourify!
+                          </p>
+                          <p className="text-sm text-gray-400">
+                            Let&apos;s get you started with a quick tour of the
+                            key features.
+                          </p>
                           <div className="flex gap-2 mt-3">
                             <button className="bg-custom-orange text-white px-4 py-1.5 rounded text-sm hover:bg-custom-orange-dark transition-colors">
                               Start Tour
@@ -89,27 +113,34 @@ export default function LandingPage() {
             Trusted by Leading Companies
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 items-center justify-items-center opacity-80 mt-3 md:mt-7">
-            {['Amazon', 'Meta', 'Microsoft', 'Apple', 'IBM', 'Google'].map((company, i) => (
-              <div key={i} className="text-custom-orange font-bold text-lg hover:text-gray-600 hover:text-xl">{company}</div>
-            ))}
+            {["Amazon", "Meta", "Microsoft", "Apple", "IBM", "Google"].map(
+              (company, i) => (
+                <div
+                  key={i}
+                  className="text-custom-orange font-bold text-lg hover:text-gray-600 hover:text-xl"
+                >
+                  {company}
+                </div>
+              )
+            )}
           </div>
         </div>
-          <div className="flex flex-wrap items-center justify-center md:justify-between gap-3 md:gap-5 mt-20 max-w-7xl mx-auto">
-            <div>
-              <p className="text-2xl font-bold mb-1.5">1,000+</p>
-              <p className="text-sm text-gray-400">Active Companies</p>
-            </div>
-            <div className="h-12 w-px bg-gray-700"></div>
-            <div>
-              <p className="text-2xl font-bold mb-1.5">10M+</p>
-              <p className="text-sm text-gray-400">Tours Completed</p>
-            </div>
-            <div className="h-12 w-px bg-gray-700"></div>
-            <div>
-              <p className="text-2xl font-bold mb-1.5">95%</p>
-              <p className="text-sm text-gray-400">Satisfaction</p>
-            </div>
+        <div className="flex flex-wrap items-center justify-center md:justify-between gap-3 md:gap-5 mt-20 max-w-7xl mx-auto">
+          <div>
+            <p className="text-2xl font-bold mb-1.5">1,000+</p>
+            <p className="text-sm text-gray-400">Active Companies</p>
           </div>
+          <div className="h-12 w-px bg-gray-700"></div>
+          <div>
+            <p className="text-2xl font-bold mb-1.5">10M+</p>
+            <p className="text-sm text-gray-400">Tours Completed</p>
+          </div>
+          <div className="h-12 w-px bg-gray-700"></div>
+          <div>
+            <p className="text-2xl font-bold mb-1.5">95%</p>
+            <p className="text-sm text-gray-400">Satisfaction</p>
+          </div>
+        </div>
       </section>
 
       {/* Features Section */}
@@ -121,7 +152,8 @@ export default function LandingPage() {
               <span className="text-custom-orange"> Onboard Users</span>
             </h2>
             <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-              Powerful features designed to create delightful product experiences
+              Powerful features designed to create delightful product
+              experiences
             </p>
           </div>
 
@@ -129,41 +161,52 @@ export default function LandingPage() {
             {[
               {
                 icon: <Target size={24} />,
-                title: 'Interactive Tours',
-                description: 'Create step-by-step walkthroughs that guide users through your product\'s key features.'
+                title: "Interactive Tours",
+                description:
+                  "Create step-by-step walkthroughs that guide users through your product's key features.",
               },
               {
                 icon: <Users size={24} />,
-                title: 'User Segmentation',
-                description: 'Target specific user groups with personalized onboarding experiences based on behavior.'
+                title: "User Segmentation",
+                description:
+                  "Target specific user groups with personalized onboarding experiences based on behavior.",
               },
               {
                 icon: <BarChart size={24} />,
-                title: 'Analytics Dashboard',
-                description: 'Track completion rates, drop-off points, and user engagement metrics in real-time.'
+                title: "Analytics Dashboard",
+                description:
+                  "Track completion rates, drop-off points, and user engagement metrics in real-time.",
               },
               {
                 icon: <Zap size={24} />,
-                title: 'Easy Integration',
-                description: 'Add Tourify to your website with just a few lines of code. No complex setup required.'
+                title: "Easy Integration",
+                description:
+                  "Add Tourify to your website with just a few lines of code. No complex setup required.",
               },
               {
                 icon: <Check size={24} />,
-                title: 'No-Code Editor',
-                description: 'Design beautiful tours without writing code. Our visual editor makes it simple.'
+                title: "No-Code Editor",
+                description:
+                  "Design beautiful tours without writing code. Our visual editor makes it simple.",
               },
               {
                 icon: <Play size={24} />,
-                title: 'Multi-Step Flows',
-                description: 'Create complex onboarding journeys with branching logic and conditional steps.'
-              }
+                title: "Multi-Step Flows",
+                description:
+                  "Create complex onboarding journeys with branching logic and conditional steps.",
+              },
             ].map((feature, i) => (
-              <div key={i} className="bg-[#1a1a1a] p-8 rounded-xl border border-custom-gray hover:border-custom-orange/50 transition-all group">
+              <div
+                key={i}
+                className="bg-[#1a1a1a] p-8 rounded-xl border border-custom-gray hover:border-custom-orange/50 transition-all group"
+              >
                 <div className="w-12 h-12 bg-custom-orange/10 rounded-lg flex items-center justify-center text-custom-orange mb-4 group-hover:bg-custom-orange/20 transition-colors">
                   {feature.icon}
                 </div>
                 <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
-                <p className="text-gray-400 leading-relaxed">{feature.description}</p>
+                <p className="text-gray-400 leading-relaxed">
+                  {feature.description}
+                </p>
               </div>
             ))}
           </div>
@@ -181,15 +224,23 @@ export default function LandingPage() {
               Join 1,000+ companies creating better product experiences
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href={"/get-started"} className="bg-white text-custom-orange px-8 py-4 rounded hover:bg-gray-100 transition-colors font-medium flex items-center justify-center gap-2">
+              <Link
+                href={"/get-started"}
+                className="bg-white text-custom-orange px-8 py-4 rounded hover:bg-gray-100 transition-colors font-medium flex items-center justify-center gap-2"
+              >
                 Get Started Now
                 <ArrowRight size={20} />
               </Link>
-              <Link href={"/documentation"} className="bg-transparent border-2 border-white text-white px-8 py-4 rounded hover:bg-white/10 transition-colors font-medium">
+              <Link
+                href={"/documentation"}
+                className="bg-transparent border-2 border-white text-white px-8 py-4 rounded hover:bg-white/10 transition-colors font-medium"
+              >
                 Docs
               </Link>
             </div>
-            <p className="mt-6 text-sm opacity-75">No credit card required • 14-days free trial</p>
+            <p className="mt-6 text-sm opacity-75">
+              No credit card required • 14-days free trial
+            </p>
           </div>
         </div>
       </section>
