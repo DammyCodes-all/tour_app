@@ -42,7 +42,7 @@ export const CreateTourModal = ({
         <div className="py-4">
           <Input
             id="new-tour-name"
-            label="Tour Name"
+            // label="Tour Name"
             placeholder="e.g., Onboarding Flow for New Users"
             value={tourName}
             onChange={(e) => setTourName(e.target.value)}
