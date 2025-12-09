@@ -190,9 +190,9 @@ const AboutPage = () => {
 
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { name: 'Fatima Jimoh', role: 'Front-end Dev', initials: 'FJ' },
-              { name: 'Olagunju Alameen', role: 'Front-end Dev', initials: 'OA' },
-              { name: 'Zainab Ibrahim', role: 'Front-end Dev', initials: 'ZI' },
+              { name: 'Fatima Jimoh', role: '@Oyiza', initials: 'FJ' },
+              { name: 'Olagunju Alameen', role: '@Aluminate', initials: 'OA' },
+              { name: 'Zainab Ibrahim', role: '@Zainab I.', initials: 'ZI' },
             ].map((member, i) => (
               <div key={i} className="text-center group">
                 <div className="w-32 h-32 bg-linear-to-br from-custom-orange to-custom-orange-dark rounded-full flex items-center justify-center text-3xl font-bold mx-auto mb-4 group-hover:scale-110 transition-transform">
