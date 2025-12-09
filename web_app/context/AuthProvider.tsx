@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { UserMetadata, Session } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/client";
+import { useRouter, usePathname } from "next/navigation";
 
 type AuthContextType = {
   user: UserMetadata | null;
@@ -28,39 +29,56 @@ export default function AuthProvider({
   const [user, setUser] = useState<UserMetadata | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const supabase = createClient();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const [supabase] = useState(() => createClient());
 
   useEffect(() => {
     const getUser = async () => {
-      setIsLoading(true);
+      if (!user) setIsLoading(true);
+
       try {
         const {
           data: { session },
         } = await supabase.auth.getSession();
 
-        setSession(session);
-        setUser(session?.user?.user_metadata ?? null);
+        if (session) {
+          setSession(session);
+          setUser(session.user.user_metadata);
+        } else {
+          setSession(null);
+          setUser(null);
+        }
       } catch (error) {
         console.error("Error loading auth session:", error);
+        setSession(null);
+        setUser(null);
       } finally {
         setIsLoading(false);
       }
     };
 
     getUser();
+  }, [supabase, pathname, user]);
 
+  useEffect(() => {
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange((event, session) => {
       setSession(session);
       setUser(session?.user?.user_metadata ?? null);
       setIsLoading(false);
+
+      if (event === "SIGNED_IN" || event === "SIGNED_OUT") {
+        router.refresh();
+      }
     });
 
     return () => {
       subscription.unsubscribe();
     };
-  }, [supabase]);
+  }, [supabase, router]);
 
   const value = {
     user,

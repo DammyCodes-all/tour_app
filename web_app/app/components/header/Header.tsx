@@ -6,6 +6,7 @@ import { useAuth } from "@/context/AuthProvider";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { LogOut } from "@/app/(auth)/actions";
+import { LogOutIcon } from "lucide-react";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -54,12 +55,18 @@ const Header = () => {
                 Log In
               </Link>
             ) : (
-              <Button
-                className="bg-custom-orange text-white px-6 py-2.5 rounded hover:bg-custom-orange-dark transition-colors font-medium"
-                onClick={handleLogout}
-              >
-                Logout
-              </Button>
+              <div className="flex items-center justify-between gap-2">
+                <div className="size-10 rounded-full bg-custom-gray text-white flex justify-center items-center">
+                  {user?.name[0]}
+                </div>
+
+                <Button
+                  className="bg-custom-orange text-white px-6 py-2.5 cursor-pointer rounded hover:bg-custom-orange-dark duration-200 transition-colors font-medium"
+                  onClick={handleLogout}
+                >
+                  Logout <LogOutIcon />
+                </Button>
+              </div>
             )}
           </div>
 
@@ -102,11 +109,17 @@ const Header = () => {
               </div>
             ) : user ? (
               <div className="space-y-4 pt-2">
+                <div className="flex items-center gap-3 px-1">
+                  <div className="size-10 rounded-full bg-custom-gray text-white flex justify-center items-center text-lg font-semibold">
+                    {user?.name?.[0]}
+                  </div>
+                  <span className="text-white font-medium">{user?.name}</span>
+                </div>
                 <Button
                   onClick={handleLogout}
-                  className="w-full bg-custom-orange text-white py-6 text-lg hover:bg-custom-orange-dark transition-colors font-medium"
+                  className="w-full bg-custom-orange text-white py-6 text-lg hover:bg-custom-orange-dark transition-colors font-medium flex items-center justify-center gap-2"
                 >
-                  Logout
+                  Logout <LogOutIcon />
                 </Button>
               </div>
             ) : (

@@ -9,13 +9,9 @@ import {
   Play,
 } from "lucide-react";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/server";
+// import { createClient } from "@/lib/supabase/server";
 
 export default async function LandingPage() {
-  const supabase = await createClient();
-  const session = await supabase.auth.getClaims();
-  const userData = session.data?.claims?.user_metadata;
-  console.log(userData);
   return (
     <div className="min-h-screen bg-custom-black text-white font-sans">
       {/* Hero Section */}
