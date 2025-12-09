@@ -1,11 +1,20 @@
+import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
 import "./globals.css";
 
 const manrope = Manrope({
-  variable: "--font-manrope",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["400", "500", "700", "800"],
+  variable: "--font-manrope",
+  display: "swap",
 });
+
+export const metadata: Metadata = {
+  title: "Tourify - Product Onboarding Made Simple",
+  description:
+    "Create interactive product tours that help users discover value faster.",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
