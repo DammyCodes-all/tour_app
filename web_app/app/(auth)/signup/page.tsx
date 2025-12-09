@@ -62,6 +62,7 @@ const SignupPage = () => {
     try {
       await SignUp(formData.username, formData.email, formData.password);
       router.push("/");
+      toast.success("Signup successful! Welcome aboard.");
     } catch (error) {
       toast.error("Signup failed. Please try again later.");
       console.error(error);

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { LogOut } from "@/app/(auth)/actions";
 import { LogOutIcon } from "lucide-react";
+import { toast } from "sonner";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -17,6 +18,7 @@ const Header = () => {
     await LogOut();
     setIsMenuOpen(false);
     router.push("/login");
+    toast.success("Logged out successfully!");
   };
 
   const closeMenu = () => setIsMenuOpen(false);

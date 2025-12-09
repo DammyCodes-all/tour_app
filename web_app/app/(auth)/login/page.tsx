@@ -60,6 +60,7 @@ const LoginPage = () => {
     try {
       await LogIn(formData.email, formData.password);
       router.push("/");
+      toast.success("Logged in successfully! Welcome back.");
     } catch (error) {
       console.error(error);
       toast.error("Login failed. Please check your credentials and try again.");
