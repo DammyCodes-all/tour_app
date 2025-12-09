@@ -15,6 +15,7 @@ export default defineConfig(({ mode }) => ({
       fileName: "widget",
       formats: ["iife"],
     },
+    cssCodeSplit: false,
     outDir: "dist",
     sourcemap: mode === "development",
     minify: mode === "production",
