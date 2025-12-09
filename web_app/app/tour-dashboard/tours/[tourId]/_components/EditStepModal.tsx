@@ -27,27 +27,27 @@ export const EditStepModal = ({
   editingStep,
 }: EditStepModalProps) => {
   const [title, setTitle] = useState(editingStep?.title || "");
-  const [description, setDescription] = useState(editingStep?.description || "");
-  const [targetElement, setTargetElement] = useState(
-    editingStep?.targetElement || ""
+  const [content, setContent] = useState(editingStep?.content || "");
+  const [target_selector, setTargetSelector] = useState(
+    editingStep?.target_selector || ""
   );
 
   useEffect(() => {
     if (editingStep) {
       setTitle(editingStep.title);
-      setDescription(editingStep.description);
-      setTargetElement(editingStep.targetElement || "");
+      setContent(editingStep.content);
+      setTargetSelector(editingStep.target_selector || "");
     }
   }, [editingStep]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (editingStep && title.trim() && description.trim()) {
+    if (editingStep && title.trim() && content.trim()) {
       onEditStep({
         ...editingStep,
         title,
-        description,
-        targetElement: targetElement || undefined,
+        content,
+        target_selector: target_selector || undefined,
       });
       onClose();
     }
@@ -64,38 +64,38 @@ export const EditStepModal = ({
         </DialogHeader>
         <form onSubmit={handleSubmit} className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
-            <label htmlFor="title" className="text-right">
+            <label htmlFor="title" className="text-right mb-1">
               Title
             </label>
             <Input
               id="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="col-span-3"
+              className="col-span-3 focus:border-custom-orange focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-custom-orange"
               required
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
-            <label htmlFor="description" className="text-right">
-              Description
+            <label htmlFor="content" className="text-right mb-1">
+              Content
             </label>
             <Textarea
-              id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="col-span-3"
+              id="content"
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              className="col-span-3 focus:border-custom-orange focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-custom-orange"
               required
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
-            <label htmlFor="targetElement" className="text-right">
+            <label htmlFor="target_selector" className="text-right mb-1">
               Target Selector (Optional)
             </label>
             <Input
-              id="targetElement"
-              value={targetElement}
-              onChange={(e) => setTargetElement(e.target.value)}
-              className="col-span-3"
+              id="target_selector"
+              value={target_selector}
+              onChange={(e) => setTargetSelector(e.target.value)}
+              className="col-span-3 focus:border-custom-orange focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-custom-orange"
             />
           </div>
           <div className="flex justify-end gap-2 mt-4">

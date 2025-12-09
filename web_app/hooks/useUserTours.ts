@@ -1,17 +1,44 @@
-"use client";
-
-import { useState } from "react";
-import { mockTours } from "@/lib/user-tours-mock-data";
+import { useState, useEffect } from "react";
+import { getTours } from "@/lib/supabase/queries";
+import { createTourInDb, updateTourInDb, deleteTourInDb } from "@/lib/supabase/mutations";
 import { Tour, TourStep } from "@/lib/types";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "sonner";
 
 export const useUserTours = () => {
-  const [tours, setTours] = useState<Tour[]>(mockTours);
+  const [tours, setTours] = useState<Tour[]>([]);
+  const [loading, setLoading] = useState(true);
   const [editingTour, setEditingTour] = useState<Tour | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [tourToDelete, setTourToDelete] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchTours = async () => {
+      setLoading(true);
+      const fetchedTours = await getTours();
+      console.log("Fetched tours structure:", fetchedTours); // Debugging line
+      const completeTours = fetchedTours.map(tour => {
+        const completeTour = {
+          ...tour,
+          steps: tour.tour_steps || [], // Map tour_steps to steps
+          analytics: tour.analytics || {
+            tourId: tour.id,
+            starts: 0,
+            completions: 0,
+            dropOffs: {},
+            skips: 0,
+          },
+        };
+        // Clean up the original tour_steps property if it exists, to match Tour interface
+        delete (completeTour as any).tour_steps;
+        return completeTour;
+      });
+      setTours(completeTours);
+      setLoading(false);
+    };
+    fetchTours();
+  }, []);
 
   const openAddModal = () => setIsAddModalOpen(true);
   const closeAddModal = () => setIsAddModalOpen(false);
@@ -28,39 +55,41 @@ export const useUserTours = () => {
     setTourToDelete(null);
   };
 
-  const createTour = (name: string, description: string) => {
-    const newTour: Tour = {
-      id: uuidv4(),
-      name,
-      description,
-      createdAt: new Date().toISOString(),
-      status: "draft",
-      steps: [],
-      analytics: {
-        tourId: "",
-        starts: 0,
-        completions: 0,
-        dropOffs: {},
-        skips: 0,
-      },
-    };
-    newTour.analytics.tourId = newTour.id;
-    setTours([...tours, newTour]);
-    toast.success("Tour created successfully!");
+  const createTour = async (title: string, description: string) => {
+    const newTour = await createTourInDb(title, description);
+    if (newTour) {
+      // Manually add steps and analytics to the new tour object
+      const completeNewTour = {
+        ...newTour,
+        steps: [],
+        analytics: {
+          tourId: newTour.id,
+          starts: 0,
+          completions: 0,
+          dropOffs: {},
+          skips: 0,
+        },
+      };
+      setTours([...tours, completeNewTour]);
+    }
   };
 
-  const updateTour = (updatedTour: Tour) => {
-    setTours(
-      tours.map((tour) => (tour.id === updatedTour.id ? updatedTour : tour))
-    );
-    toast.success("Tour updated successfully!");
+  const updateTour = async (updatedTour: Tour) => {
+    const result = await updateTourInDb(updatedTour.id, updatedTour.title, updatedTour.description);
+    if (result) {
+      setTours(
+        tours.map((tour) => (tour.id === updatedTour.id ? updatedTour : tour))
+      );
+    }
   };
 
-  const deleteTour = () => {
+  const deleteTour = async () => {
     if (tourToDelete) {
-      setTours(tours.filter((tour) => tour.id !== tourToDelete));
-      toast.success("Tour deleted successfully!");
-      closeDeleteConfirm();
+      const success = await deleteTourInDb(tourToDelete);
+      if (success) {
+        setTours(tours.filter((tour) => tour.id !== tourToDelete));
+        closeDeleteConfirm();
+      }
     }
   };
   
@@ -111,6 +140,7 @@ export const useUserTours = () => {
 
   return {
     tours,
+    loading,
     editingTour,
     isAddModalOpen,
     isDeleteConfirmOpen,

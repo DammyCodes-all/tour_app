@@ -28,19 +28,19 @@ export const EditTourModal = ({
   onClose,
   onUpdate,
 }: EditTourModalProps) => {
-  const [name, setName] = useState("");
+  const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
   useEffect(() => {
     if (tour) {
-      setName(tour.name);
+      setTitle(tour.title);
       setDescription(tour.description);
     }
   }, [tour]);
 
   const handleSubmit = () => {
-    if (tour && name.trim() && description.trim()) {
-      onUpdate({ ...tour, name, description });
+    if (tour && title.trim() && description.trim()) {
+      onUpdate({ ...tour, title, description });
       onClose();
     }
   };
@@ -56,14 +56,14 @@ export const EditTourModal = ({
         </DialogHeader>
         <div className="py-4 space-y-4">
           <div>
-            <label htmlFor="edit-tour-name" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-1">
-              Tour Name
+            <label htmlFor="edit-tour-title" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-1">
+              Tour Title
             </label>
             <Input
-              id="edit-tour-name"
+              id="edit-tour-title"
               placeholder="e.g., Onboarding Flow for New Users"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
               className="focus:border-custom-orange focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-custom-orange"
             />
           </div>

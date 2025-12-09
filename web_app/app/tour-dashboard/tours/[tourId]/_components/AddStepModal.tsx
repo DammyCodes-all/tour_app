@@ -16,21 +16,21 @@ import { TourStep } from "@/lib/types";
 interface AddStepModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onAddStep: (step: Omit<TourStep, "id">) => void;
+  onAddStep: (step: Omit<TourStep, "id" | "step_number" | "step_id">) => void;
 }
 
 export const AddStepModal = ({ isOpen, onClose, onAddStep }: AddStepModalProps) => {
   const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [targetElement, setTargetElement] = useState("");
+  const [content, setContent] = useState("");
+  const [target_selector, setTargetSelector] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (title.trim() && description.trim()) {
-      onAddStep({ title, description, targetElement: targetElement || undefined });
+    if (title.trim() && content.trim()) {
+      onAddStep({ title, content, target_selector: target_selector || undefined });
       setTitle("");
-      setDescription("");
-      setTargetElement("");
+      setContent("");
+      setTargetSelector("");
       onClose();
     }
   };
@@ -58,26 +58,27 @@ export const AddStepModal = ({ isOpen, onClose, onAddStep }: AddStepModalProps) 
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
-            <label htmlFor="description" className="text-right">
-              Description
+            <label htmlFor="content" className="text-right">
+              Content
             </label>
             <Textarea
-              id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              id="content"
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
               className="col-span-3"
               required
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
-            <label htmlFor="targetElement" className="text-right">
-              Target Selector (Optional)
+            <label htmlFor="target_selector" className="text-right">
+              Target Selector
             </label>
             <Input
-              id="targetElement"
-              value={targetElement}
-              onChange={(e) => setTargetElement(e.target.value)}
+              id="target_selector"
+              value={target_selector}
+              onChange={(e) => setTargetSelector(e.target.value)}
               className="col-span-3"
+              required
             />
           </div>
           <div className="flex justify-end gap-2 mt-4">

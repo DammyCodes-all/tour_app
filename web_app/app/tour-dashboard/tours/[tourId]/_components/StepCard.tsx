@@ -52,10 +52,10 @@ export const StepCard = ({ step, stepNumber, onEdit, onDelete }: StepCardProps) 
             </CardTitle>
           </CardHeader>
           <CardContent className="flex-grow">
-            <p className="text-sm text-muted-foreground">{step.description}</p>
-            {step.targetElement && (
+            <p className="text-sm text-muted-foreground">{step.content}</p>
+            {step.target_selector && (
               <div className="mt-2">
-                <Badge variant="secondary">Target: {step.targetElement}</Badge>
+                <Badge variant="secondary">Target: {step.target_selector}</Badge>
               </div>
             )}
           </CardContent>

@@ -35,7 +35,7 @@ export const CurrentUserToursTable = ({
       <TableHeader>
         <TableRow>
           <TableHead className="w-[100px]">ID</TableHead>
-          <TableHead>Name</TableHead>
+          <TableHead>Title</TableHead>
           <TableHead>Status</TableHead>
           <TableHead>Created At</TableHead>
           <TableHead className="text-right">Actions</TableHead>
@@ -45,19 +45,19 @@ export const CurrentUserToursTable = ({
         {tours.map((tour) => (
           <TableRow key={tour.id}>
             <TableCell className="font-medium">{tour.id}</TableCell>
-            <TableCell>{tour.name}</TableCell>
+            <TableCell>{tour.title}</TableCell>
             <TableCell>
               <span
                 className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                  tour.status === "published"
+                  tour.is_published
                     ? "bg-green-100 text-green-800"
                     : "bg-yellow-100 text-yellow-800"
                 }`}
               >
-                {tour.status}
+                {tour.is_published ? "Published" : "Draft"}
               </span>
             </TableCell>
-            <TableCell>{format(new Date(tour.createdAt), "PPP")}</TableCell>
+            <TableCell>{format(new Date(tour.created_at), "PPP")}</TableCell>
             <TableCell className="text-right">
               <TooltipProvider>
                 <Tooltip>

@@ -29,7 +29,7 @@ export default function TourDashboardPage() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const currentUserTours = tours.filter((tour) =>
-    tour.name.toLowerCase().includes(searchQuery.toLowerCase())
+    tour.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
   
   const handleReorderSteps = (tourId: string, newOrder: any[]) => {
@@ -47,7 +47,7 @@ export default function TourDashboardPage() {
   };
 
   const currentTourToDelete = tours.find(tour => tour.id === tourToDelete); // Added
-  const tourNameToDelete = currentTourToDelete?.name || "";                // Added
+  const tourNameToDelete = currentTourToDelete?.title || "";                // Added
 
   return (
         <TourDashboardLayout>
