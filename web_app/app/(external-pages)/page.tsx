@@ -40,7 +40,7 @@ export default async function LandingPage() {
 
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
-                  href={"/get-started"}
+                  href={"/tour-dashboard"}
                   className="bg-custom-orange text-white px-8 py-4 rounded hover:bg-custom-orange-dark transition-all font-medium flex items-center justify-center gap-2 group"
                 >
                   Get Started for Free
