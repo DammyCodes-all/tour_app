@@ -53,7 +53,7 @@ export const AddStepModal = ({ isOpen, onClose, onAddStep }: AddStepModalProps) 
               id="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="col-span-3"
+              className="col-span-3 focus:border-custom-orange focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-custom-orange"
               required
             />
           </div>
@@ -65,7 +65,7 @@ export const AddStepModal = ({ isOpen, onClose, onAddStep }: AddStepModalProps) 
               id="content"
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              className="col-span-3"
+              className="col-span-3 focus:border-custom-orange focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-custom-orange"
               required
             />
           </div>
@@ -77,7 +77,7 @@ export const AddStepModal = ({ isOpen, onClose, onAddStep }: AddStepModalProps) 
               id="target_selector"
               value={target_selector}
               onChange={(e) => setTargetSelector(e.target.value)}
-              className="col-span-3"
+              className="col-span-3 focus:border-custom-orange focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-custom-orange"
               required
             />
           </div>
