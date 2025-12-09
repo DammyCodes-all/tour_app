@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { SignUp } from "../actions";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const signupSchema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters"),
@@ -62,6 +63,7 @@ const SignupPage = () => {
       await SignUp(formData.username, formData.email, formData.password);
       router.push("/");
     } catch (error) {
+      toast.error("Signup failed. Please try again later.");
       console.error(error);
     }
   };

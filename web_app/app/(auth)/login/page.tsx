@@ -7,8 +7,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { LogIn } from "../actions";
 import { useRouter } from "next/navigation";
-import { Zap } from "lucide-react";
-
+import { toast } from "sonner";
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
   password: z.string().min(1, "Password is required"),
@@ -63,6 +62,7 @@ const LoginPage = () => {
       router.push("/");
     } catch (error) {
       console.error(error);
+      toast.error("Login failed. Please check your credentials and try again.");
     }
   };
 
