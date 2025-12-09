@@ -12,8 +12,6 @@ const TrustedBySection = () => {
         if (!container) return;
 
         const scrollWidth = container.scrollWidth;
-
-        // Create seamless infinite scroll
         gsap.to(container, {
             x: -(scrollWidth / 2),
             duration: 20,
