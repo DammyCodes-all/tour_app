@@ -1,6 +1,15 @@
 @import "tailwindcss";
 
 @theme {
+    --color-theme-dark-orange: #d87d4a;
+  --color-theme-dark: #101010;
+  --color-theme-lightgray: #f1f1f1;
+  --color-theme-gray: #cfcfcf;
+  --color-theme-light: #fafafa;
+  --color-theme-white: #ffffff;
+  --color-theme-black: #000000;
+  --color-theme-light-orange: #fbaf85;
+
   --color-background: #191919;
   --color-foreground: #ffffff;
 
@@ -54,22 +63,12 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-custom-orange-dark);
+}
 :root {
   --background: #ffffff;
   --foreground: #171717;
 }
 colors {
-  --color-theme-dark-orange: #d87d4a;
-  --color-theme-dark: #101010;
-  --color-theme-lightgray: #f1f1f1;
-  --color-theme-gray: #cfcfcf;
-  --color-theme-light: #fafafa;
-  --color-theme-white: #ffffff;
-  --color-theme-black: #000000;
-  --color-theme-light-orange: #fbaf85;
-}
-
-@theme {
   --color-theme-dark-orange: #d87d4a;
   --color-theme-dark: #101010;
   --color-theme-lightgray: #f1f1f1;
