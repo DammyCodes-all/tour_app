@@ -33,11 +33,13 @@ export const EditStepModal = ({
   );
 
   useEffect(() => {
-    if (editingStep) {
-      setTitle(editingStep.title);
-      setContent(editingStep.content);
-      setTargetSelector(editingStep.target_selector || "");
-    }
+    (() => {
+      if (editingStep) {
+        setTitle(editingStep.title);
+        setContent(editingStep.content ?? "");
+        setTargetSelector(editingStep.target_selector || "");
+      }
+    })();
   }, [editingStep]);
 
   const handleSubmit = (e: React.FormEvent) => {
