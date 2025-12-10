@@ -13,11 +13,14 @@ export const TourHeader = ({ tour }: TourHeaderProps) => {
   return (
     <div className="flex justify-between items-start p-6 bg-card text-card-foreground rounded-lg shadow">
       <div>
-        <Link href="/tour-dashboard/tours" className="flex items-center text-sm text-muted-foreground mb-4">
+        <Link
+          href="/tour-dashboard/tours"
+          className="flex items-center text-sm text-muted-foreground mb-4"
+        >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Tours
         </Link>
-        <h1 className="text-3xl font-bold">{tour.name}</h1>
+        <h1 className="text-3xl font-bold">{tour.title}</h1>
         <p className="mt-2 text-muted-foreground">{tour.description}</p>
       </div>
       <div className="text-right">
