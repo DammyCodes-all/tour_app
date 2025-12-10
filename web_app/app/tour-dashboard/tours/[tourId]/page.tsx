@@ -12,6 +12,7 @@ import { StepCard } from "./_components/StepCard";
 import { AddStepModal } from "./_components/AddStepModal";
 import { EditStepModal } from "./_components/EditStepModal";
 import { AnalyticsCharts } from "./_components/AnalyticsCharts";
+import { DeleteStepConfirmation } from "./_components/DeleteStepConfirmation"; // New Import
 import { TourStep } from "@/lib/types";
 
 export default function TourDetailsPage() {
@@ -19,7 +20,18 @@ export default function TourDetailsPage() {
   const params = useParams();
   const tourId = params.tourId as string;
 
-  const { tour, loading, error, addStep, editStep, deleteStep } = useTourDetails(tourId);
+  const {
+    tour,
+    loading,
+    error,
+    addStep,
+    editStep,
+    openDeleteStepConfirm,   // New
+    closeDeleteStepConfirm,  // New
+    isDeleteStepConfirmOpen, // New
+    stepToDeleteId,          // New
+    confirmDeleteStep,       // New
+  } = useTourDetails(tourId);
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -63,6 +75,9 @@ export default function TourDetailsPage() {
     );
   }
 
+  const currentStepToDelete = tour.steps.find(step => step.id === stepToDeleteId); // New
+  const stepTitleToDelete = currentStepToDelete?.title || "";                      // New
+
   return (
     <div className="container mx-auto py-8 px-4">
       <div className="flex items-center gap-4 mb-8">
@@ -72,7 +87,7 @@ export default function TourDetailsPage() {
           </Button>
         </Link>
         <div>
-          <h1 className="text-3xl font-bold">{tour.name}</h1>
+          <h1 className="text-3xl font-bold">{tour.title}</h1>
           <p className="text-lg text-muted-foreground">{tour.description}</p>
         </div>
       </div>
@@ -98,7 +113,7 @@ export default function TourDetailsPage() {
                       step={step}
                       stepNumber={index + 1}
                       onEdit={handleEditClick}
-                      onDelete={deleteStep}
+                      onDelete={openDeleteStepConfirm} // Updated
                     />
                   ))}
                 </div>
@@ -127,6 +142,13 @@ export default function TourDetailsPage() {
         }}
         onEditStep={editStep}
         editingStep={editingStep}
+      />
+      {/* Delete Step Confirmation Modal */}
+      <DeleteStepConfirmation // New Modal
+        isOpen={isDeleteStepConfirmOpen}
+        onClose={closeDeleteStepConfirm}
+        onConfirm={confirmDeleteStep}
+        stepTitle={stepTitleToDelete}
       />
     </div>
   );

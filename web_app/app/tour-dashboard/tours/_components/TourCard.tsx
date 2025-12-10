@@ -17,6 +17,7 @@ export const TourCard = ({ tour, onEdit, onDelete }: TourCardProps) => {
   const router = useRouter(); // Initialize useRouter
 
   const handleCardClick = () => {
+    console.log("Card clicked, attempting to navigate to:", `/tour-dashboard/tours/${tour.id}`);
     router.push(`/tour-dashboard/tours/${tour.id}`);
   };
 
@@ -32,7 +33,7 @@ export const TourCard = ({ tour, onEdit, onDelete }: TourCardProps) => {
       <div className="bg-linear-to-br from-custom-orange/20 to-custom-orange/5 rounded-2xl p-8 border border-custom-orange/20 hover:border-custom-orange h-full">
         <Card className="flex flex-col h-full bg-custom-black/90 border-none shadow-none">
           <CardHeader>
-            <CardTitle>{tour.name}</CardTitle>
+            <CardTitle>{tour.title}</CardTitle>
             <CardDescription>{tour.description}</CardDescription>
           </CardHeader>
           <CardContent className="flex-grow">
