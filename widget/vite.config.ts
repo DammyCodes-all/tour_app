@@ -1,13 +1,14 @@
 import { defineConfig } from "vite";
 import path from "path";
 import { fileURLToPath } from "url";
+import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Vite config for embeddable widget
 export default defineConfig(({ mode }) => ({
-  plugins: [],
+  plugins: [cssInjectedByJsPlugin()],
   build: {
     lib: {
       entry: path.resolve(__dirname, "src/main.ts"),
@@ -15,6 +16,7 @@ export default defineConfig(({ mode }) => ({
       fileName: "widget",
       formats: ["iife"],
     },
+    cssCodeSplit: false,
     outDir: "dist",
     sourcemap: mode === "development",
     minify: mode === "production",
