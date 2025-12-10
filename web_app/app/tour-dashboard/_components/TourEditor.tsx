@@ -52,7 +52,7 @@ export const TourEditor = ({
         <Button variant="outline" onClick={onBack}>
           <ArrowLeft className="mr-2 h-4 w-4" /> Back to Tours
         </Button>
-        <h2 className="text-3xl font-bold">{editedTour.name}</h2>
+        <h2 className="text-3xl font-bold">{editedTour.title}</h2>
         <div className="flex space-x-2">
           <Button onClick={handleSave}>
             <Save className="mr-2 h-4 w-4" /> Save Tour
@@ -71,9 +71,9 @@ export const TourEditor = ({
           <Input
             id="tour-name"
             type="text"
-            value={editedTour.name}
+            value={editedTour.title}
             onChange={(e) =>
-              setEditedTour((prev) => ({ ...prev, name: e.target.value }))
+              setEditedTour((prev) => ({ ...prev, title: e.target.value }))
             }
           />
           <div>
@@ -103,7 +103,7 @@ export const TourEditor = ({
 
       <StepsEditor
         tourId={editedTour.id}
-        steps={editedTour.steps}
+        steps={editedTour.steps ?? []}
         onAddStep={onAddStep}
         onUpdateStep={onUpdateStep}
         onDeleteStep={onDeleteStep}

@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { Tour } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,7 +10,7 @@ import {
   TableBody,
   TableCell,
 } from "@/components/ui/table";
-import { PlusCircle, Edit, Trash2, Eye } from "lucide-react";
+import { Edit, Trash2, Eye } from "lucide-react";
 import { format } from "date-fns";
 
 interface AllToursTableProps {
@@ -25,12 +24,8 @@ export const AllToursTable = ({
   onSelectTour,
   onDeleteTour,
 }: AllToursTableProps) => {
-
-
   return (
     <div className="space-y-4">
-
-
       <Table>
         <TableHeader>
           <TableRow>
@@ -45,7 +40,7 @@ export const AllToursTable = ({
           {tours.map((tour) => (
             <TableRow key={tour.id}>
               <TableCell className="font-medium">{tour.id}</TableCell>
-              <TableCell>{tour.name}</TableCell>
+              <TableCell>{tour.title}</TableCell>
               <TableCell>
                 <span
                   className={`px-2 py-1 rounded-full text-xs font-semibold ${
@@ -57,13 +52,23 @@ export const AllToursTable = ({
                   {tour.status}
                 </span>
               </TableCell>
-              <TableCell>{format(new Date(tour.createdAt), "PPP")}</TableCell>
+              <TableCell>
+                {format(new Date(tour?.created_at ?? ""), "PPP")}
+              </TableCell>
               <TableCell className="text-right">
-                <Button variant="ghost" size="icon" onClick={() => onSelectTour(tour.id)}>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => onSelectTour(tour.id)}
+                >
                   <Edit className="h-4 w-4" />
                   <span className="sr-only">Edit Tour</span>
                 </Button>
-                <Button variant="ghost" size="icon" onClick={() => onDeleteTour(tour.id)}>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => onDeleteTour(tour.id)}
+                >
                   <Trash2 className="h-4 w-4" />
                   <span className="sr-only">Delete Tour</span>
                 </Button>

@@ -8,28 +8,36 @@ export interface User {
 
 export interface Tour {
   id: string;
-  title: string; // Changed from name
-  description: string;
-  created_at: string; // Changed from createdAt
-  is_published: boolean;
-  steps: TourStep[];
-  analytics?: TourAnalytics; // Made optional as it's not in the DB
+  title?: string;
+  description?: string;
+  created_at?: string;
+  is_published?: boolean;
+  tour_steps?: TourStep[];
+  steps?: TourStep[];
+  status?: "draft" | "published";
+  analytics?: TourAnalytics;
 }
 
 export interface TourStep {
   id: string;
   title: string;
-  content: string; // Changed from description
-  target_selector?: string; // Changed from targetElement
-  step_number: number;
-  step_id: string;
+  description?: string;
+  content?: string;
+  // selector can come as either name
+  target_selector?: string;
+  targetElement?: string;
+  step_number?: number;
+  step_id?: string;
+  placement?: "auto" | "top" | "bottom" | "left" | "right" | string;
 }
 
+/**
+ * Optional analytics shape
+ */
 export interface TourAnalytics {
   tourId: string;
   starts: number;
   completions: number;
-  dropOffs: Record<string, number>; // Key is step_id
+  dropOffs: Record<string, number>;
   skips: number;
 }
-

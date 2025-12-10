@@ -12,9 +12,6 @@ import {
   ResponsiveContainer,
   LineChart,
   Line,
-  PieChart,
-  Pie,
-  Cell,
 } from "recharts";
 
 interface AnalyticsChartsProps {
@@ -36,14 +33,18 @@ export const AnalyticsCharts = ({ tours }: AnalyticsChartsProps) => {
 
   const dropOffData = tours.flatMap((tour) =>
     Object.entries(tour.analytics?.dropOffs || {}).map(([stepId, count]) => ({
-      name: `${tour.title.substring(0, 10)}... - ${stepId}`,
+      name: `${tour.title?.substring(0, 10) ?? ""}... - ${stepId}`,
       dropOffs: count,
     }))
   );
 
-  const completionRateData = tours.map(tour => ({
+  const completionRateData = tours.map((tour) => ({
     name: tour.title,
-    rate: (tour.analytics?.starts || 0) > 0 ? ((tour.analytics?.completions || 0) / (tour.analytics?.starts || 0)) * 100 : 0
+    rate:
+      (tour.analytics?.starts || 0) > 0
+        ? ((tour.analytics?.completions || 0) / (tour.analytics?.starts || 0)) *
+          100
+        : 0,
   }));
 
   return (
@@ -88,7 +89,7 @@ export const AnalyticsCharts = ({ tours }: AnalyticsChartsProps) => {
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={dropOffData}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" tick={{fontSize: 10}}/>
+              <XAxis dataKey="name" tick={{ fontSize: 10 }} />
               <YAxis />
               <Tooltip />
               <Bar dataKey="dropOffs" fill="#ffc658" />
@@ -96,7 +97,7 @@ export const AnalyticsCharts = ({ tours }: AnalyticsChartsProps) => {
           </ResponsiveContainer>
         </CardContent>
       </Card>
-       <Card>
+      <Card>
         <CardHeader>
           <CardTitle>Completion Rate (%)</CardTitle>
         </CardHeader>

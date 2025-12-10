@@ -57,12 +57,18 @@ export const CurrentUserToursTable = ({
                 {tour.is_published ? "Published" : "Draft"}
               </span>
             </TableCell>
-            <TableCell>{format(new Date(tour.created_at), "PPP")}</TableCell>
+            <TableCell>
+              {format(new Date(tour?.created_at ?? ""), "PPP")}
+            </TableCell>
             <TableCell className="text-right">
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="ghost" size="icon" onClick={() => onSelectTour(tour.id)}>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => onSelectTour(tour.id)}
+                    >
                       <Edit className="h-4 w-4" />
                       <span className="sr-only">Edit Tour</span>
                     </Button>
@@ -73,7 +79,11 @@ export const CurrentUserToursTable = ({
                 </Tooltip>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="ghost" size="icon" onClick={() => onDeleteTour(tour.id)}>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => onDeleteTour(tour.id)}
+                    >
                       <Trash2 className="h-4 w-4" />
                       <span className="sr-only">Delete Tour</span>
                     </Button>

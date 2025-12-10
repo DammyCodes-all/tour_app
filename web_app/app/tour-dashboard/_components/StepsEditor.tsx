@@ -5,7 +5,7 @@ import { TourStep } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { PlusCircle, Edit, Trash2, ArrowUp, ArrowDown } from "lucide-react";
+import { PlusCircle, Edit, Trash2 } from "lucide-react";
 import {
   DragDropContext,
   Droppable,
