@@ -1,6 +1,6 @@
 import sampleTour from "./sample-tour.json";
 
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = "https://tour-app-virid-kappa.vercel.app";
 
 type RawStep = Record<string, any>;
 type RawTour = Record<string, any>;
@@ -26,8 +26,6 @@ function normalizeTour(t: RawTour) {
 }
 
 export async function fetchTour(org: string, tour: string) {
-  // const SAMPLE_ID = "8313d312-5574-47f7-8125-5309814efe21";
-
   if (org === "sample-org" && tour === "sample-tour") {
     return normalizeTour(sampleTour);
   }
