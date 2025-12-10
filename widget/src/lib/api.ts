@@ -1,7 +1,54 @@
 import sampleTour from "./sample-tour.json";
 
+const BASE_URL = "http://localhost:3000";
+
+type RawStep = Record<string, any>;
+type RawTour = Record<string, any>;
+
+function normalizeTour(t: RawTour) {
+  const steps = (t.tour_steps ?? t.steps ?? []) as RawStep[];
+  const tour_steps = steps.map((s) => ({
+    id: s.id ?? s.step_id ?? s.stepId ?? null,
+    title: s.title ?? s.name ?? "",
+    content: s.content ?? s.text ?? "",
+    target_selector: s.target_selector ?? s.selector ?? s.target ?? "",
+    placement: s.placement ?? "auto",
+    step_number: s.step_number ?? s.stepNumber ?? null,
+    step_id: s.step_id ?? s.stepId ?? null,
+    tour_id: s.tour_id ?? t.id ?? null,
+  }));
+  return {
+    id: t.id ?? null,
+    title: t.title ?? t.name ?? "",
+    description: t.description ?? "",
+    tour_steps,
+  };
+}
+
 export async function fetchTour(org: string, tour: string) {
+  // const SAMPLE_ID = "8313d312-5574-47f7-8125-5309814efe21";
+
   if (org === "sample-org" && tour === "sample-tour") {
-    return sampleTour;
-  } else return null;
+    return normalizeTour(sampleTour);
+  }
+  try {
+    const url = new URL(`${BASE_URL}/api/widget`);
+    url.searchParams.append("org", org);
+    url.searchParams.append("tour_id", tour);
+    const response = await fetch(url.toString());
+    if (!response.ok) {
+      console.error(
+        `Error fetching tour: ${response.status} ${response.statusText}`
+      );
+      return null;
+    }
+    const data = await response.json();
+    if (Array.isArray(data) && data.length > 0) {
+      return normalizeTour(data[0]);
+    }
+  } catch (error) {
+    console.error("Error fetching tour:", error);
+  }
+
+  return null;
 }
