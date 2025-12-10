@@ -10,12 +10,11 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 // import { createClient } from "@/lib/supabase/server";
-import RotatingText from '../components/animations/rotating-text/RotatingText';
-import DecryptedText from '../components/animations/decrypted-text/DecryptedText';
-import TrustedBySection from '../components/trusted-by/TrustedBySection';
+import RotatingText from "../components/animations/rotating-text/RotatingText";
+import DecryptedText from "../components/animations/decrypted-text/DecryptedText";
+import TrustedBySection from "../components/trusted-by/TrustedBySection";
 
 const LandingPage = () => {
-export default async function LandingPage() {
   return (
     <div className="min-h-screen bg-custom-black text-white font-sans">
       {/* Hero Section */}
@@ -39,7 +38,7 @@ export default async function LandingPage() {
               <h1 className="text-xl sm:text-3xl lg:text-4xl font-bold leading-tight">
                 Drive Product Growth with
                 <RotatingText
-                  texts={['Guided Tours', 'Walkthroughs', 'Discovery!']}
+                  texts={["Guided Tours", "Walkthroughs", "Discovery!"]}
                   mainClassName="text-custom-orange text-black overflow-hidden py-0.5 sm:py-1 md:py-2 justify-start rounded-lg"
                   staggerFrom={"last"}
                   initial={{ y: "100%" }}
@@ -77,7 +76,6 @@ export default async function LandingPage() {
                   Docs
                 </Link>
               </div>
-
             </div>
 
             {/* Hero Image/Demo */}
@@ -128,7 +126,7 @@ export default async function LandingPage() {
       </section>
 
       {/* Trusted By Section */}
-        <TrustedBySection />
+      <TrustedBySection />
 
       {/* Features Section */}
       <section id="features" className="py-24 px-4 sm:px-6 lg:px-8">
@@ -233,5 +231,5 @@ export default async function LandingPage() {
       </section>
     </div>
   );
-}
+};
 export default LandingPage;
