@@ -13,14 +13,13 @@ function init() {
     console.error("[Tourify] Script element not found");
     return;
   }
-  const org = script.getAttribute("data-org");
-  const tour = script.getAttribute("data-tour");
+  const tour = script.getAttribute("data-tour-id");
 
-  if (!org || !tour) {
-    console.error("[Tourify] Missing data-org or data-tour");
+  if (!tour) {
+    console.error("[Tourify] Missing data-tour-id");
     return;
   }
-  fetchTour(org, tour)
+  fetchTour(tour)
     .then((tourData) => {
       if (tourData) {
         runShepherdTour(tourData);

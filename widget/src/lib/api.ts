@@ -25,13 +25,12 @@ function normalizeTour(t: RawTour) {
   };
 }
 
-export async function fetchTour(org: string, tour: string) {
-  if (org === "sample-org" && tour === "sample-tour") {
+export async function fetchTour(tour: string) {
+  if (tour === "sample-tour") {
     return normalizeTour(sampleTour);
   }
   try {
     const url = new URL(`${BASE_URL}/api/widget`);
-    url.searchParams.append("org", org);
     url.searchParams.append("tour_id", tour);
     const response = await fetch(url.toString());
     if (!response.ok) {
