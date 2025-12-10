@@ -108,7 +108,7 @@ export const TourDashboardLayout = ({ children }: DashboardLayoutProps) => {
             </Link>
           </div>
         </header>
-        <main className="flex flex-1 flex-col gap-4 px-6 py-4 lg:gap-6 lg:p-6 mx-auto w-full max-w-7xl overflow-y-scroll max-h-screen">
+        <main className="flex flex-1 flex-col gap-4 px-6 py-4 lg:gap-6 lg:p-6 mx-auto w-full max-w-7xl overflow-y-scroll max-h-screen scrollbar-hidden">
           {children}
         </main>
       </div>

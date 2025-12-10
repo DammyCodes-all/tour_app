@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { TourDashboardLayout } from "../_components/TourDashboardLayout";
 import { TourCard } from "./_components/TourCard";
 import { AddTourModal } from "./_components/AddTourModal";
 import { EditTourModal } from "./_components/EditTourModal";
@@ -33,7 +31,7 @@ export default function UserToursPage() {
   const displayedTours = tours;
 
   return (
-    <TourDashboardLayout>
+    <>
       <div className="flex flex-col gap-6">
         <div className="flex justify-between items-center">
           <h1 className="text-3xl font-bold">Your Tours</h1>
@@ -80,6 +78,6 @@ export default function UserToursPage() {
         }
       />
       <Toaster />
-    </TourDashboardLayout>
+    </>
   );
 }

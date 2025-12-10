@@ -13,8 +13,6 @@ import Link from "next/link";
 import RotatingText from "../components/animations/rotating-text/RotatingText";
 import DecryptedText from "../components/animations/decrypted-text/DecryptedText";
 import TrustedBySection from "../components/trusted-by/TrustedBySection";
-import gsap from "gsap";
-import useGsap from "@gsap/react";
 
 const LandingPage = () => {
   return (
