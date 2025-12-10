@@ -32,10 +32,12 @@ export const EditTourModal = ({
   const [description, setDescription] = useState("");
 
   useEffect(() => {
-    if (tour) {
-      setTitle(tour.title);
-      setDescription(tour.description);
-    }
+    (() => {
+      if (tour) {
+        setTitle(tour.title ?? "");
+        setDescription(tour.description ?? "");
+      }
+    })();
   }, [tour]);
 
   const handleSubmit = () => {
@@ -56,7 +58,10 @@ export const EditTourModal = ({
         </DialogHeader>
         <div className="py-4 space-y-4">
           <div>
-            <label htmlFor="edit-tour-title" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-1">
+            <label
+              htmlFor="edit-tour-title"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-1"
+            >
               Tour Title
             </label>
             <Input
@@ -68,7 +73,10 @@ export const EditTourModal = ({
             />
           </div>
           <div>
-            <label htmlFor="edit-tour-description" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-1">
+            <label
+              htmlFor="edit-tour-description"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-1"
+            >
               Description
             </label>
             <Textarea

@@ -44,7 +44,9 @@ export default function UserToursPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {displayedTours.length === 0 ? (
-            <p className="md:col-span-2 lg:col-span-3 text-center text-muted-foreground">No tours found. Create one to get started!</p>
+            <p className="md:col-span-2 lg:col-span-3 text-center text-muted-foreground">
+              No tours found. Create one to get started!
+            </p>
           ) : (
             displayedTours.map((tour) => (
               <TourCard
@@ -74,11 +76,10 @@ export default function UserToursPage() {
         onClose={closeDeleteConfirm}
         onConfirm={deleteTour}
         tourName={
-          tours.find((t) => t.id === editingTour?.id)?.name || "selected tour"
+          tours.find((t) => t.id === editingTour?.id)?.title || "selected tour"
         }
       />
       <Toaster />
     </TourDashboardLayout>
   );
 }
-

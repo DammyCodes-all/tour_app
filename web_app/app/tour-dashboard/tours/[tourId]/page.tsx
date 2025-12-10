@@ -6,7 +6,13 @@ import Link from "next/link";
 import { ArrowLeftIcon, PlusIcon } from "lucide-react";
 import { useTourDetails } from "@/hooks/useTourDetails";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton"; // Assuming Skeleton component exists
 import { StepCard } from "./_components/StepCard";
 import { AddStepModal } from "./_components/AddStepModal";
@@ -26,11 +32,11 @@ export default function TourDetailsPage() {
     error,
     addStep,
     editStep,
-    openDeleteStepConfirm,   // New
-    closeDeleteStepConfirm,  // New
+    openDeleteStepConfirm, // New
+    closeDeleteStepConfirm, // New
     isDeleteStepConfirmOpen, // New
-    stepToDeleteId,          // New
-    confirmDeleteStep,       // New
+    stepToDeleteId, // New
+    confirmDeleteStep, // New
   } = useTourDetails(tourId);
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -75,8 +81,10 @@ export default function TourDetailsPage() {
     );
   }
 
-  const currentStepToDelete = tour.steps.find(step => step.id === stepToDeleteId); // New
-  const stepTitleToDelete = currentStepToDelete?.title || "";                      // New
+  const currentStepToDelete = tour.steps?.find(
+    (step) => step.id === stepToDeleteId
+  ); // New
+  const stepTitleToDelete = currentStepToDelete?.title || ""; // New
 
   return (
     <div className="container mx-auto py-8 px-4">
@@ -98,16 +106,21 @@ export default function TourDetailsPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-2xl font-bold">Tour Steps</CardTitle>
-              <Button onClick={() => setIsAddModalOpen(true)} className="flex items-center gap-2">
+              <Button
+                onClick={() => setIsAddModalOpen(true)}
+                className="flex items-center gap-2"
+              >
                 <PlusIcon className="h-4 w-4" /> Add Step
               </Button>
             </CardHeader>
             <CardContent>
-              {tour.steps.length === 0 ? (
-                <p className="text-muted-foreground">No steps added yet. Click "Add Step" to begin!</p>
+              {tour.steps?.length === 0 ? (
+                <p className="text-muted-foreground">
+                  No steps added yet. Click "Add Step" to begin!
+                </p>
               ) : (
                 <div className="grid gap-4">
-                  {tour.steps.map((step, index) => (
+                  {tour.steps?.map((step, index) => (
                     <StepCard
                       key={step.id}
                       step={step}
@@ -124,7 +137,18 @@ export default function TourDetailsPage() {
 
         {/* Analytics Section */}
         <div className="col-span-12 lg:col-span-4">
-          <AnalyticsCharts analytics={tour.analytics} totalSteps={tour.steps.length} />
+          <AnalyticsCharts
+            analytics={
+              tour?.analytics ?? {
+                completions: 0,
+                skips: 0,
+                starts: 0,
+                tourId: tour.id,
+                dropOffs: {},
+              }
+            }
+            totalSteps={tour.steps?.length || 0}
+          />
         </div>
       </div>
 
@@ -153,4 +177,3 @@ export default function TourDetailsPage() {
     </div>
   );
 }
-
