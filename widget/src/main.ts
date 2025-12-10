@@ -5,7 +5,7 @@ import { runShepherdTour } from "./run-shepard.js";
 
 // function to initialize the widget
 const script = document.querySelector(
-  "script[data-org][data-tour]"
+  "script[data-tour-id]"
 ) as HTMLScriptElement;
 
 function init() {

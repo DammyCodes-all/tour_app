@@ -8,10 +8,12 @@ import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { useUserTours } from "@/hooks/useUserTours";
 import { Toaster } from "@/components/ui/sonner"; // For sonner toasts
+import Loading from "./loading";
 
 export default function UserToursPage() {
   const {
     tours,
+    loading,
     editingTour,
     isAddModalOpen,
     isDeleteConfirmOpen,
@@ -25,6 +27,10 @@ export default function UserToursPage() {
     updateTour,
     deleteTour,
   } = useUserTours();
+
+  if (loading) {
+    return <Loading />;
+  }
 
   // Filter tours if needed (e.g., current user's tours vs. all)
   // For now, we display all tours from the mock data
