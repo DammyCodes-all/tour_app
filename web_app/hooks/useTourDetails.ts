@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
 import { Tour, TourStep } from "@/lib/types";
 import { getTourById, getTourAnalytics } from "@/lib/supabase/queries";
-import { addStepToDb, updateStepInDb, deleteStepInDb } from "@/lib/supabase/mutations";
+import {
+  addStepToDb,
+  updateStepInDb,
+  deleteStepInDb,
+} from "@/lib/supabase/mutations";
 import { toast } from "sonner";
 
 export const useTourDetails = (tourId: string) => {
@@ -21,7 +25,8 @@ export const useTourDetails = (tourId: string) => {
         const completeTour = {
           ...foundTour,
           steps: foundTour.steps || [],
-          analytics: analytics || { // Use fetched analytics or default
+          analytics: analytics || {
+            // Use fetched analytics or default
             tourId: foundTour.id,
             starts: 0,
             completions: 0,
@@ -43,22 +48,26 @@ export const useTourDetails = (tourId: string) => {
     }
   }, [tourId]);
 
-  const openDeleteStepConfirm = (stepId: string) => { // New function
+  const openDeleteStepConfirm = (stepId: string) => {
+    // New function
     setStepToDeleteId(stepId);
     setIsDeleteStepConfirmOpen(true);
   };
-  const closeDeleteStepConfirm = () => { // New function
+  const closeDeleteStepConfirm = () => {
+    // New function
     setStepToDeleteId(null);
     setIsDeleteStepConfirmOpen(false);
   };
 
-  const addStep = async (stepData: Omit<TourStep, "id" | "step_number" | "step_id">) => {
+  const addStep = async (
+    stepData: Omit<TourStep, "id" | "step_number" | "step_id">
+  ) => {
     if (!tour) return;
-    const step_number = tour.steps.length + 1;
+    const step_number = tour.steps?.length ?? 0 + 1;
     const newStep = await addStepToDb(tour.id, stepData, step_number);
 
     if (newStep) {
-      const updatedTour = { ...tour, steps: [...tour.steps, newStep] };
+      const updatedTour = { ...tour, steps: [...(tour.steps ?? []), newStep] };
       setTour(updatedTour);
     }
   };
@@ -69,7 +78,7 @@ export const useTourDetails = (tourId: string) => {
     if (result) {
       const updatedTour = {
         ...tour,
-        steps: tour.steps.map((step) =>
+        steps: tour.steps?.map((step) =>
           step.id === updatedStep.id ? updatedStep : step
         ),
       };
@@ -77,13 +86,14 @@ export const useTourDetails = (tourId: string) => {
     }
   };
 
-  const confirmDeleteStep = async () => { // Modified deleteStep
+  const confirmDeleteStep = async () => {
+    // Modified deleteStep
     if (!tour || !stepToDeleteId) return;
     const success = await deleteStepInDb(stepToDeleteId);
     if (success) {
       const updatedTour = {
         ...tour,
-        steps: tour.steps.filter((step) => step.id !== stepToDeleteId),
+        steps: tour.steps?.filter((step) => step.id !== stepToDeleteId),
       };
       setTour(updatedTour);
       closeDeleteStepConfirm();

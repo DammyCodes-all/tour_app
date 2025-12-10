@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import { getTours, getAllToursAnalytics } from "@/lib/supabase/queries";
-import { createTourInDb, updateTourInDb, deleteTourInDb } from "@/lib/supabase/mutations";
+import {
+  createTourInDb,
+  updateTourInDb,
+  deleteTourInDb,
+} from "@/lib/supabase/mutations";
 import { Tour, TourStep } from "@/lib/types";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "sonner";
@@ -19,11 +23,12 @@ export const useUserTours = () => {
       const fetchedTours = await getTours();
       const allToursAnalyticsMap = await getAllToursAnalytics(); // Fetch all analytics
 
-      const completeTours = fetchedTours.map(tour => {
+      const completeTours = fetchedTours.map((tour) => {
         const completeTour = {
           ...tour,
           steps: tour.tour_steps || [], // Map tour_steps to steps
-          analytics: allToursAnalyticsMap[tour.id] || { // Merge fetched analytics or default
+          analytics: allToursAnalyticsMap[tour.id] || {
+            // Merge fetched analytics or default
             tourId: tour.id,
             starts: 0,
             completions: 0,
@@ -32,7 +37,7 @@ export const useUserTours = () => {
           },
         };
         // Clean up the original tour_steps property if it exists, to match Tour interface
-        delete (completeTour as any).tour_steps;
+        delete completeTour?.tour_steps;
         return completeTour;
       });
       setTours(completeTours);
@@ -76,7 +81,11 @@ export const useUserTours = () => {
   };
 
   const updateTour = async (updatedTour: Tour) => {
-    const result = await updateTourInDb(updatedTour.id, updatedTour.title, updatedTour.description);
+    const result = await updateTourInDb(
+      updatedTour.id,
+      updatedTour?.title ?? "",
+      updatedTour?.description ?? ""
+    );
     if (result) {
       setTours(
         tours.map((tour) => (tour.id === updatedTour.id ? updatedTour : tour))
@@ -93,18 +102,18 @@ export const useUserTours = () => {
       }
     }
   };
-  
+
   const addStep = (tourId: string, step: Omit<TourStep, "id">) => {
     const newStep = { ...step, id: uuidv4() };
     const updatedTours = tours.map((tour) => {
       if (tour.id === tourId) {
-        return { ...tour, steps: [...tour.steps, newStep] };
+        return { ...tour, steps: [...(tour.steps ?? []), newStep] };
       }
       return tour;
     });
     setTours(updatedTours);
-    if(editingTour?.id === tourId) {
-      setEditingTour(updatedTours.find(t => t.id === tourId) || null);
+    if (editingTour?.id === tourId) {
+      setEditingTour(updatedTours.find((t) => t.id === tourId) || null);
     }
   };
 
@@ -113,7 +122,7 @@ export const useUserTours = () => {
       if (tour.id === tourId) {
         return {
           ...tour,
-          steps: tour.steps.map((step) =>
+          steps: tour.steps?.map((step) =>
             step.id === updatedStep.id ? updatedStep : step
           ),
         };
@@ -121,21 +130,24 @@ export const useUserTours = () => {
       return tour;
     });
     setTours(updatedTours);
-    if(editingTour?.id === tourId) {
-      setEditingTour(updatedTours.find(t => t.id === tourId) || null);
+    if (editingTour?.id === tourId) {
+      setEditingTour(updatedTours.find((t) => t.id === tourId) || null);
     }
   };
 
   const deleteStep = (tourId: string, stepId: string) => {
     const updatedTours = tours.map((tour) => {
       if (tour.id === tourId) {
-        return { ...tour, steps: tour.steps.filter((step) => step.id !== stepId) };
+        return {
+          ...tour,
+          steps: tour.steps?.filter((step) => step.id !== stepId),
+        };
       }
       return tour;
     });
     setTours(updatedTours);
-    if(editingTour?.id === tourId) {
-      setEditingTour(updatedTours.find(t => t.id === tourId) || null);
+    if (editingTour?.id === tourId) {
+      setEditingTour(updatedTours.find((t) => t.id === tourId) || null);
     }
   };
 
