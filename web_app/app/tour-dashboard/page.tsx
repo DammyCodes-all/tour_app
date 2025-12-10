@@ -6,7 +6,7 @@ import { AnalyticsCharts } from "./_components/AnalyticsCharts";
 import { TourSearchBar } from "./_components/TourSearchBar";
 import { CurrentUserToursTable } from "./_components/CurrentUserToursTable";
 import { TourEditor } from "./_components/TourEditor";
-import { DeleteTourConfirmation } from "./tours/_components/DeleteTourConfirmation"; // Corrected import path
+import { DeleteTourConfirmation } from "./tours/_components/DeleteTourConfirmation";
 
 export default function TourDashboardPage() {
   const {

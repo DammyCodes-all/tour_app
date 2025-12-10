@@ -32,8 +32,6 @@ export default function UserToursPage() {
     return <Loading />;
   }
 
-  // Filter tours if needed (e.g., current user's tours vs. all)
-  // For now, we display all tours from the mock data
   const displayedTours = tours;
 
   return (
