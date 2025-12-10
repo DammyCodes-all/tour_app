@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getTours } from "@/lib/supabase/queries";
+import { getTours, getAllToursAnalytics } from "@/lib/supabase/queries";
 import { createTourInDb, updateTourInDb, deleteTourInDb } from "@/lib/supabase/mutations";
 import { Tour, TourStep } from "@/lib/types";
 import { v4 as uuidv4 } from "uuid";
@@ -17,12 +17,13 @@ export const useUserTours = () => {
     const fetchTours = async () => {
       setLoading(true);
       const fetchedTours = await getTours();
-      console.log("Fetched tours structure:", fetchedTours); // Debugging line
+      const allToursAnalyticsMap = await getAllToursAnalytics(); // Fetch all analytics
+
       const completeTours = fetchedTours.map(tour => {
         const completeTour = {
           ...tour,
           steps: tour.tour_steps || [], // Map tour_steps to steps
-          analytics: tour.analytics || {
+          analytics: allToursAnalyticsMap[tour.id] || { // Merge fetched analytics or default
             tourId: tour.id,
             starts: 0,
             completions: 0,

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Tour, TourStep } from "@/lib/types";
-import { getTourById } from "@/lib/supabase/queries";
+import { getTourById, getTourAnalytics } from "@/lib/supabase/queries";
 import { addStepToDb, updateStepInDb, deleteStepInDb } from "@/lib/supabase/mutations";
 import { toast } from "sonner";
 
@@ -17,10 +17,11 @@ export const useTourDetails = (tourId: string) => {
       setError(null);
       const foundTour = await getTourById(tourId);
       if (foundTour) {
+        const analytics = await getTourAnalytics(foundTour.id); // Fetch analytics
         const completeTour = {
           ...foundTour,
           steps: foundTour.steps || [],
-          analytics: foundTour.analytics || {
+          analytics: analytics || { // Use fetched analytics or default
             tourId: foundTour.id,
             starts: 0,
             completions: 0,

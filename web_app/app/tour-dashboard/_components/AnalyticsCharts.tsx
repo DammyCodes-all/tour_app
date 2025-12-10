@@ -25,25 +25,25 @@ const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
 export const AnalyticsCharts = ({ tours }: AnalyticsChartsProps) => {
   const startsData = tours.map((tour) => ({
-    name: tour.name,
-    starts: tour.analytics.starts,
+    name: tour.title,
+    starts: tour.analytics?.starts || 0,
   }));
 
   const completionsData = tours.map((tour) => ({
-    name: tour.name,
-    completions: tour.analytics.completions,
+    name: tour.title,
+    completions: tour.analytics?.completions || 0,
   }));
 
   const dropOffData = tours.flatMap((tour) =>
-    Object.entries(tour.analytics.dropOffs).map(([stepId, count]) => ({
-      name: `${tour.name.substring(0, 10)}... - ${stepId}`,
+    Object.entries(tour.analytics?.dropOffs || {}).map(([stepId, count]) => ({
+      name: `${tour.title.substring(0, 10)}... - ${stepId}`,
       dropOffs: count,
     }))
   );
 
   const completionRateData = tours.map(tour => ({
-    name: tour.name,
-    rate: tour.analytics.starts > 0 ? (tour.analytics.completions / tour.analytics.starts) * 100 : 0
+    name: tour.title,
+    rate: (tour.analytics?.starts || 0) > 0 ? ((tour.analytics?.completions || 0) / (tour.analytics?.starts || 0)) * 100 : 0
   }));
 
   return (
