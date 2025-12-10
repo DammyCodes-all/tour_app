@@ -13,14 +13,45 @@ const supabase = createClient();
  * const { data, error } = await supabase.from('tours').select('*');
  */
 
-export const getTours = async (): Promise<Tour[]> => {
-  console.log("Fetching all tours from Supabase");
-  const { data: tours, error } = await supabase.from('tours').select('*, tour_steps(*)');
+export const getTours = async (userId: string): Promise<Tour[]> => {
+  console.log(`Fetching tours for user: ${userId} from Supabase`);
+  
+  // Step 1: Fetch the basic tour data for the user
+  const { data: tours, error } = await supabase
+    .from('tours')
+    .select('id, title, description, created_at, is_published')
+    .eq('user_id', userId);
+
   if (error) {
-    console.error("Error fetching tours:", error);
+    console.error("Error fetching tours (simple query):", error);
+    // Let the calling function handle the toast message
+    throw new Error("Failed to fetch tours.");
+  }
+
+  if (!tours || tours.length === 0) {
     return [];
   }
-  return tours || [];
+
+  // Step 2: Fetch the steps for the retrieved tours
+  const tourIds = tours.map(t => t.id);
+  const { data: steps, error: stepsError } = await supabase
+      .from('tour_steps')
+      .select('*')
+      .in('tour_id', tourIds);
+
+  if (stepsError) {
+      console.error("Error fetching steps separately:", stepsError);
+      // If steps fail, return tours without steps and log the issue
+      return tours.map(t => ({ ...t, steps: [] }));
+  }
+
+  // Step 3: Manually join tours and steps in code
+  const toursWithSteps = tours.map(tour => ({
+      ...tour,
+      steps: steps.filter(step => step.tour_id === tour.id) || []
+  }));
+
+  return toursWithSteps;
 };
 
 export const getTourById = async (tourId: string): Promise<Tour | null> => {
@@ -99,44 +130,72 @@ export const getTourAnalytics = async (tourId: string): Promise<TourAnalytics | 
   };
 };
 
-export const getAllToursAnalytics = async (): Promise<Record<string, TourAnalytics>> => {
-  console.log("Fetching all tours analytics (Supabase)");
+export const getAllToursAnalytics = async (tourIds: string[]): Promise<Record<string, TourAnalytics>> => {
+  console.log("Fetching analytics for specific tours (Supabase)");
   const analyticsMap: Record<string, TourAnalytics> = {};
 
-  // Fetch all tour-level summaries (most recent for each tour)
+  if (tourIds.length === 0) {
+    return analyticsMap;
+  }
+
+  // Fetch all tour-level summaries for the specific tours
   const { data: allTourSummaries, error: allTourSummariesError } = await supabase
-    .rpc('get_latest_tour_daily_summaries'); // Assuming an RPC to get latest summary for each tour
+    .from('tour_daily_summary')
+    .select('*')
+    .in('tour_id', tourIds);
 
   if (allTourSummariesError) {
     console.error('Error fetching all tour summaries:', allTourSummariesError);
     return analyticsMap;
   }
 
-  // Fetch all step-level summaries (most recent for each tour/step)
-  const { data: allStepSummaries, error: allStepSummariesError } = await supabase
-    .rpc('get_latest_step_daily_summaries'); // Assuming an RPC to get latest summary for each step
+  // Process to get the latest summary for each tour
+  const latestTourSummaries = allTourSummaries.reduce((acc, summary) => {
+    if (!acc[summary.tour_id] || new Date(summary.summary_date) > new Date(acc[summary.tour_id].summary_date)) {
+      acc[summary.tour_id] = summary;
+    }
+    return acc;
+  }, {} as Record<string, typeof allTourSummaries[0]>);
 
+  // Fetch all step-level summaries for the specific tours
+  const { data: allStepSummaries, error: allStepSummariesError } = await supabase
+    .from('step_daily_summary')
+    .select('*')
+    .in('tour_id', tourIds);
+  
   if (allStepSummariesError) {
     console.error('Error fetching all step summaries:', allStepSummariesError);
     return analyticsMap;
   }
 
-  allTourSummaries.forEach((summary: any) => {
-    analyticsMap[summary.tour_id] = {
-      tourId: summary.tour_id,
+  // Process to get the latest summary for each step
+  const latestStepSummaries = allStepSummaries.reduce((acc, summary) => {
+    const key = `${summary.tour_id}-${summary.step_id}`;
+    if (!acc[key] || new Date(summary.summary_date) > new Date(acc[key].summary_date)) {
+      acc[key] = summary;
+    }
+    return acc;
+  }, {} as Record<string, typeof allStepSummaries[0]>);
+
+  // Populate the analyticsMap
+  for (const tourId in latestTourSummaries) {
+    const summary = latestTourSummaries[tourId];
+    analyticsMap[tourId] = {
+      tourId: tourId,
       starts: summary.total_starts || 0,
       completions: summary.total_completions || 0,
-      dropOffs: {}, // Will be populated by stepSummaries
-      skips: 0,     // Will be populated by stepSummaries
+      dropOffs: {},
+      skips: 0,
     };
-  });
+  }
 
-  allStepSummaries.forEach((summary: any) => {
+  for (const key in latestStepSummaries) {
+    const summary = latestStepSummaries[key];
     if (analyticsMap[summary.tour_id]) {
       analyticsMap[summary.tour_id].dropOffs[summary.step_id] = summary.step_drop_offs || 0;
       analyticsMap[summary.tour_id].skips += summary.step_skips || 0;
     }
-  });
+  }
 
   return analyticsMap;
 };

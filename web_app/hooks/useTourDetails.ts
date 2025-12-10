@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Tour, TourStep } from "@/lib/types";
-import { getTourById, getTourAnalytics } from "@/lib/supabase/queries";
+import { getTourById } from "@/lib/supabase/queries";
 import {
   addStepToDb,
   updateStepInDb,
@@ -12,35 +12,31 @@ export const useTourDetails = (tourId: string) => {
   const [tour, setTour] = useState<Tour | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [isDeleteStepConfirmOpen, setIsDeleteStepConfirmOpen] = useState(false); // New state
-  const [stepToDeleteId, setStepToDeleteId] = useState<string | null>(null); // New state
+  const [isDeleteStepConfirmOpen, setIsDeleteStepConfirmOpen] = useState(false);
+  const [stepToDeleteId, setStepToDeleteId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchTourDetails = async () => {
       setLoading(true);
       setError(null);
-      const foundTour = await getTourById(tourId);
-      if (foundTour) {
-        const analytics = await getTourAnalytics(foundTour.id); // Fetch analytics
-        const completeTour = {
-          ...foundTour,
-          steps: foundTour.steps || [],
-          analytics: analytics || {
-            // Use fetched analytics or default
-            tourId: foundTour.id,
-            starts: 0,
-            completions: 0,
-            dropOffs: {},
-            skips: 0,
-          },
-        };
-        setTour(completeTour);
-        toast.success("Tour details loaded successfully!");
-      } else {
-        setError("Tour not found.");
-        toast.error("Tour not found!");
+      try {
+        const foundTour = await getTourById(tourId);
+        if (foundTour) {
+          setTour({
+            ...foundTour,
+            steps: foundTour.steps || [],
+          });
+          toast.success("Tour details loaded successfully!");
+        } else {
+          setError("Tour not found.");
+          toast.error("Tour not found!");
+        }
+      } catch (err) {
+        setError("Failed to fetch tour details.");
+        toast.error("Failed to fetch tour details.");
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     if (tourId) {
@@ -49,12 +45,10 @@ export const useTourDetails = (tourId: string) => {
   }, [tourId]);
 
   const openDeleteStepConfirm = (stepId: string) => {
-    // New function
     setStepToDeleteId(stepId);
     setIsDeleteStepConfirmOpen(true);
   };
   const closeDeleteStepConfirm = () => {
-    // New function
     setStepToDeleteId(null);
     setIsDeleteStepConfirmOpen(false);
   };
@@ -63,11 +57,11 @@ export const useTourDetails = (tourId: string) => {
     stepData: Omit<TourStep, "id" | "step_number" | "step_id">
   ) => {
     if (!tour) return;
-    const step_number = tour.steps?.length ?? 0 + 1;
+    const step_number = (tour.steps?.length || 0) + 1;
     const newStep = await addStepToDb(tour.id, stepData, step_number);
 
     if (newStep) {
-      const updatedTour = { ...tour, steps: [...(tour.steps ?? []), newStep] };
+      const updatedTour = { ...tour, steps: [...(tour.steps || []), newStep] };
       setTour(updatedTour);
     }
   };
@@ -78,7 +72,7 @@ export const useTourDetails = (tourId: string) => {
     if (result) {
       const updatedTour = {
         ...tour,
-        steps: tour.steps?.map((step) =>
+        steps: (tour.steps || []).map((step) =>
           step.id === updatedStep.id ? updatedStep : step
         ),
       };
@@ -87,13 +81,14 @@ export const useTourDetails = (tourId: string) => {
   };
 
   const confirmDeleteStep = async () => {
-    // Modified deleteStep
     if (!tour || !stepToDeleteId) return;
     const success = await deleteStepInDb(stepToDeleteId);
     if (success) {
       const updatedTour = {
         ...tour,
-        steps: tour.steps?.filter((step) => step.id !== stepToDeleteId),
+        steps: (tour.steps || []).filter(
+          (step) => step.id !== stepToDeleteId
+        ),
       };
       setTour(updatedTour);
       closeDeleteStepConfirm();
@@ -106,7 +101,6 @@ export const useTourDetails = (tourId: string) => {
     error,
     addStep,
     editStep,
-    // Original deleteStep replaced by openDeleteStepConfirm and confirmDeleteStep
     openDeleteStepConfirm,
     closeDeleteStepConfirm,
     isDeleteStepConfirmOpen,
