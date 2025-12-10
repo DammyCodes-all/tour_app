@@ -67,7 +67,8 @@ export function runShepherdTour(tour: Tour) {
 
     shepherd.addStep({
       id: step.id ?? undefined,
-      text: step.content,
+      title: step.title ?? tour.title ?? undefined,
+      text: step.content || "",
       attachTo: {
         element: step.target_selector,
         on: step.placement ?? "auto",

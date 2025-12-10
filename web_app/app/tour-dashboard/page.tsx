@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useUserTours } from "@/hooks/useUserTours";
-import { TourDashboardLayout } from "./_components/TourDashboardLayout";
 import { AnalyticsCharts } from "./_components/AnalyticsCharts";
 import { TourSearchBar } from "./_components/TourSearchBar";
 import { CurrentUserToursTable } from "./_components/CurrentUserToursTable";
@@ -50,7 +49,7 @@ export default function TourDashboardPage() {
   const tourNameToDelete = currentTourToDelete?.title || ""; // Added
 
   return (
-    <TourDashboardLayout>
+    <>
       {editingTour ? (
         <TourEditor
           tour={editingTour}
@@ -87,6 +86,6 @@ export default function TourDashboardPage() {
         onConfirm={deleteTour}
         tourName={tourNameToDelete}
       />
-    </TourDashboardLayout>
+    </>
   );
 }

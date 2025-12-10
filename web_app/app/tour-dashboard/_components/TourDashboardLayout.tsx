@@ -1,20 +1,24 @@
 "use client";
 
 import Link from "next/link";
-import {
-  Home,
-  Menu,
-  Eye,
-} from "lucide-react";
+import { Home, Menu, Eye, LogOutIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-
-
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { LogOut } from "@/app/(auth)/actions";
 interface DashboardLayoutProps {
   children: React.ReactNode;
 }
 
 export const TourDashboardLayout = ({ children }: DashboardLayoutProps) => {
+  const router = useRouter();
+  const handleLogout = async () => {
+    await LogOut();
+    router.push("/login");
+    toast.success("Logged out successfully!");
+  };
+
   return (
     <div className="grid min-h-screen w-full lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r border-[#4a4a4a] bg-muted/40 lg:block">
@@ -26,7 +30,7 @@ export const TourDashboardLayout = ({ children }: DashboardLayoutProps) => {
               </Link>
             </div>
           </div>
-          <div className="flex-1">
+          <div className="flex-1 flex justify-between flex-col ">
             <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
               <Link
                 href="/tour-dashboard"
@@ -42,8 +46,13 @@ export const TourDashboardLayout = ({ children }: DashboardLayoutProps) => {
                 <Eye className="h-4 w-4" />
                 Tours
               </Link>
-
             </nav>
+            <Button
+              className="bg-custom-orange text-white px-6 py-2.5 cursor-pointer rounded hover:bg-custom-orange-dark duration-200 transition-colors font-medium max-w-[90%] mx-4 mb-4"
+              onClick={handleLogout}
+            >
+              Logout <LogOutIcon />
+            </Button>
           </div>
         </div>
       </div>
@@ -83,6 +92,14 @@ export const TourDashboardLayout = ({ children }: DashboardLayoutProps) => {
                   Tours
                 </Link>
               </nav>
+              <div className="px-5 pb-5">
+                <Button
+                  className="w-full bg-custom-orange text-white px-4 py-2 rounded hover:bg-custom-orange-dark duration-200 transition-colors font-medium flex items-center justify-center gap-2"
+                  onClick={handleLogout}
+                >
+                  Logout <LogOutIcon />
+                </Button>
+              </div>
             </SheetContent>
           </Sheet>
           <div className="flex items-center lg:hidden">
