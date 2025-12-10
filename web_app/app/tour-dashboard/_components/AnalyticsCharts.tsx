@@ -10,109 +10,71 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  LineChart,
-  Line,
+  Legend,
+  Cell,
 } from "recharts";
+import { AnalyticsEmptyState } from "./AnalyticsEmptyState";
+import { StatCard } from "./StatCard";
 
 interface AnalyticsChartsProps {
   tours: Tour[];
 }
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#AF19FF"];
 
 export const AnalyticsCharts = ({ tours }: AnalyticsChartsProps) => {
-  const startsData = tours.map((tour) => ({
-    name: tour.title,
-    starts: tour.analytics?.starts || 0,
-  }));
+  if (tours.length === 0) {
+    return <AnalyticsEmptyState />;
+  }
 
-  const completionsData = tours.map((tour) => ({
-    name: tour.title,
-    completions: tour.analytics?.completions || 0,
-  }));
-
-  const dropOffData = tours.flatMap((tour) =>
-    Object.entries(tour.analytics?.dropOffs || {}).map(([stepId, count]) => ({
-      name: `${tour.title?.substring(0, 10) ?? ""}... - ${stepId}`,
-      dropOffs: count,
-    }))
+  const totalTours = tours.length;
+  const totalSteps = tours.reduce(
+    (acc, tour) => acc + (tour.steps?.length || 0),
+    0
   );
+  const averageSteps = totalTours > 0 ? totalSteps / totalTours : 0;
 
-  const completionRateData = tours.map((tour) => ({
-    name: tour.title,
-    rate:
-      (tour.analytics?.starts || 0) > 0
-        ? ((tour.analytics?.completions || 0) / (tour.analytics?.starts || 0)) *
-          100
-        : 0,
+  const stepsPerTourData = tours.map((tour) => ({
+    name: (tour.title && tour.title.length > 20) ? `${tour.title.substring(0, 20)}...` : (tour.title || "Untitled Tour"),
+    steps: tour.steps?.length || 0,
   }));
 
   return (
-    <div className="grid gap-4 md:grid-cols-2">
-      <Card>
-        <CardHeader>
-          <CardTitle>Tour Starts</CardTitle>
-        </CardHeader>
-        <CardContent className="h-[300px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={startsData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="starts" fill="#8884d8" />
-            </BarChart>
-          </ResponsiveContainer>
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>Tour Completions</CardTitle>
-        </CardHeader>
-        <CardContent className="h-[300px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={completionsData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="completions" fill="#82ca9d" />
-            </BarChart>
-          </ResponsiveContainer>
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>Step Drop-offs</CardTitle>
-        </CardHeader>
-        <CardContent className="h-[300px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={dropOffData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" tick={{ fontSize: 10 }} />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="dropOffs" fill="#ffc658" />
-            </BarChart>
-          </ResponsiveContainer>
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>Completion Rate (%)</CardTitle>
-        </CardHeader>
-        <CardContent className="h-[300px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={completionRateData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Line type="monotone" dataKey="rate" stroke="#ff8042" />
-            </LineChart>
-          </ResponsiveContainer>
-        </CardContent>
-      </Card>
+    <div className="space-y-4">
+      {/* Row for Stat Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <StatCard title="Total Tours" value={totalTours} />
+        <StatCard title="Total Steps" value={totalSteps} />
+        <StatCard title="Avg Steps per Tour" value={averageSteps.toFixed(1)} />
+      </div>
+
+      {/* Row for Bar Chart */}
+      <div className="grid grid-cols-1 gap-4">
+        <Card>
+          <CardHeader>
+            <CardTitle>Steps per Tour</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart
+                data={stepsPerTourData}
+                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" type="category" />
+                <YAxis type="number" />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="steps">
+                  {stepsPerTourData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };

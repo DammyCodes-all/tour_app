@@ -1,28 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { useParams, useRouter } from "next/navigation";
-import Link from "next/link";
-import { ArrowLeftIcon, PlusIcon } from "lucide-react";
+import { useParams } from "next/navigation";
+import { PlusIcon } from "lucide-react";
 import { useTourDetails } from "@/hooks/useTourDetails";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton"; // Assuming Skeleton component exists
+import { Card, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { StepCard } from "./_components/StepCard";
 import { AddStepModal } from "./_components/AddStepModal";
 import { EditStepModal } from "./_components/EditStepModal";
-import { AnalyticsCharts } from "./_components/AnalyticsCharts";
-import { DeleteStepConfirmation } from "./_components/DeleteStepConfirmation"; // New Import
+import { DeleteStepConfirmation } from "./_components/DeleteStepConfirmation";
+import { TourHeader } from "./_components/TourHeader";
+import { GenerateScript } from "./_components/GenerateScript";
 import { TourStep } from "@/lib/types";
 
 export default function TourDetailsPage() {
-  const router = useRouter();
   const params = useParams();
   const tourId = params.tourId as string;
 
@@ -32,11 +25,11 @@ export default function TourDetailsPage() {
     error,
     addStep,
     editStep,
-    openDeleteStepConfirm, // New
-    closeDeleteStepConfirm, // New
-    isDeleteStepConfirmOpen, // New
-    stepToDeleteId, // New
-    confirmDeleteStep, // New
+    openDeleteStepConfirm,
+    closeDeleteStepConfirm,
+    isDeleteStepConfirmOpen,
+    stepToDeleteId,
+    confirmDeleteStep,
   } = useTourDetails(tourId);
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -50,21 +43,11 @@ export default function TourDetailsPage() {
 
   if (loading) {
     return (
-      <div className="container mx-auto py-8 px-4 animate-pulse">
-        <div className="flex items-center gap-4 mb-8">
-          <Skeleton className="h-8 w-24" />
-          <Skeleton className="h-10 w-96" />
-        </div>
-        <div className="grid grid-cols-12 gap-8">
-          <div className="col-span-12 lg:col-span-8 space-y-6">
-            <Skeleton className="h-32 w-full" />
-            <Skeleton className="h-20 w-full" />
-            <Skeleton className="h-20 w-full" />
-          </div>
-          <div className="col-span-12 lg:col-span-4 space-y-6">
-            <Skeleton className="h-64 w-full" />
-          </div>
-        </div>
+      <div className="container mx-auto py-8 px-4 space-y-8 animate-pulse">
+        <Skeleton className="h-16 w-1/2" />
+        <Skeleton className="h-8 w-3/4" />
+        <Skeleton className="h-40 w-full" />
+        <Skeleton className="h-32 w-full" />
       </div>
     );
   }
@@ -72,9 +55,8 @@ export default function TourDetailsPage() {
   if (error || !tour) {
     return (
       <div className="container mx-auto py-8 px-4 text-center">
-        <h1 className="text-2xl font-bold text-red-500">Error</h1>
-        <p className="text-muted-foreground">{error || "Tour not found."}</p>
-        <Button onClick={() => router.back()} className="mt-4">
+        <h1 className="text-2xl font-bold text-red-500">{error || "Tour not found."}</h1>
+        <Button onClick={() => window.history.back()} className="mt-4">
           Go Back
         </Button>
       </div>
@@ -83,74 +65,57 @@ export default function TourDetailsPage() {
 
   const currentStepToDelete = tour.steps?.find(
     (step) => step.id === stepToDeleteId
-  ); // New
-  const stepTitleToDelete = currentStepToDelete?.title || ""; // New
+  );
+  const stepTitleToDelete = currentStepToDelete?.title || "";
 
   return (
     <div className="container mx-auto py-8 px-4">
-      <div className="flex items-center gap-4 mb-8">
-        <Link href="/tour-dashboard/tours" passHref>
-          <Button variant="outline" size="icon">
-            <ArrowLeftIcon className="h-5 w-5" />
+      {/* 1. Modern Header */}
+      <TourHeader title={tour.title || ""} />
+
+      {/* 2. Descriptive Text */}
+      <p className="text-muted-foreground mb-8">
+        You need at least 5 steps before your tour script can be generated. Add
+        clear CSS selectors and short descriptions to guide your users effectively.
+      </p>
+
+      {/* 3. Tour Steps Section */}
+      <div className="mb-8">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-bold">Tour Steps</h2>
+          <Button
+            onClick={() => setIsAddModalOpen(true)}
+            className="flex items-center gap-2"
+          >
+            <PlusIcon className="h-4 w-4" /> Add Step
           </Button>
-        </Link>
-        <div>
-          <h1 className="text-3xl font-bold">{tour.title}</h1>
-          <p className="text-lg text-muted-foreground">{tour.description}</p>
         </div>
+        <Card>
+          <CardContent className="p-6">
+            {tour.steps?.length === 0 ? (
+              <div className="text-center py-6">
+                <p className="text-muted-foreground font-semibold">No steps added yet.</p>
+                <p className="text-sm text-muted-foreground">Click "Add Step" to begin!</p>
+              </div>
+            ) : (
+              <div className="-mt-2">
+                {tour.steps?.map((step, index) => (
+                  <StepCard
+                    key={step.id}
+                    step={step}
+                    stepNumber={index + 1}
+                    onEdit={handleEditClick}
+                    onDelete={openDeleteStepConfirm}
+                  />
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </div>
-
-      <div className="grid grid-cols-12 gap-8">
-        {/* Tour Steps Section */}
-        <div className="col-span-12 lg:col-span-8">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-2xl font-bold">Tour Steps</CardTitle>
-              <Button
-                onClick={() => setIsAddModalOpen(true)}
-                className="flex items-center gap-2"
-              >
-                <PlusIcon className="h-4 w-4" /> Add Step
-              </Button>
-            </CardHeader>
-            <CardContent>
-              {tour.steps?.length === 0 ? (
-                <p className="text-muted-foreground">
-                  No steps added yet. Click "Add Step" to begin!
-                </p>
-              ) : (
-                <div className="grid gap-4">
-                  {tour.steps?.map((step, index) => (
-                    <StepCard
-                      key={step.id}
-                      step={step}
-                      stepNumber={index + 1}
-                      onEdit={handleEditClick}
-                      onDelete={openDeleteStepConfirm} // Updated
-                    />
-                  ))}
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Analytics Section */}
-        <div className="col-span-12 lg:col-span-4">
-          <AnalyticsCharts
-            analytics={
-              tour?.analytics ?? {
-                completions: 0,
-                skips: 0,
-                starts: 0,
-                tourId: tour.id,
-                dropOffs: {},
-              }
-            }
-            totalSteps={tour.steps?.length || 0}
-          />
-        </div>
-      </div>
+      
+      {/* 4. Generate Script Button/Section */}
+      <GenerateScript tourId={tour.id} stepsCount={tour.steps?.length || 0} />
 
       {/* Modals */}
       <AddStepModal
@@ -167,8 +132,7 @@ export default function TourDetailsPage() {
         onEditStep={editStep}
         editingStep={editingStep}
       />
-      {/* Delete Step Confirmation Modal */}
-      <DeleteStepConfirmation // New Modal
+      <DeleteStepConfirmation
         isOpen={isDeleteStepConfirmOpen}
         onClose={closeDeleteStepConfirm}
         onConfirm={confirmDeleteStep}

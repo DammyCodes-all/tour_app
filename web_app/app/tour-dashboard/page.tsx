@@ -67,16 +67,20 @@ export default function TourDashboardPage() {
 
           <AnalyticsCharts tours={currentUserTours} />
 
-          <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-semibold">Your Tours</h2>
-            <TourSearchBar onSearch={setSearchQuery} />
-          </div>
+          {currentUserTours.length > 0 && (
+            <>
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-semibold">Your Tours</h2>
+                <TourSearchBar onSearch={setSearchQuery} />
+              </div>
 
-          <CurrentUserToursTable
-            tours={currentUserTours}
-            onSelectTour={handleSelectTour}
-            onDeleteTour={openDeleteConfirm}
-          />
+              <CurrentUserToursTable
+                tours={currentUserTours}
+                onSelectTour={handleSelectTour}
+                onDeleteTour={openDeleteConfirm}
+              />
+            </>
+          )}
         </div>
       )}
 

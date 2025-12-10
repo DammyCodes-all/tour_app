@@ -1,11 +1,9 @@
 "use client";
 
 import { TourStep } from "@/lib/types";
-import { motion } from "framer-motion";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { PencilIcon, TrashIcon } from "lucide-react";
+import { PencilIcon, TrashIcon, GripVertical } from "lucide-react";
 
 interface StepCardProps {
   step: TourStep;
@@ -15,52 +13,35 @@ interface StepCardProps {
 }
 
 export const StepCard = ({ step, stepNumber, onEdit, onDelete }: StepCardProps) => {
-  const handleEditClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    onEdit(step);
-  };
-
-  const handleDeleteClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    onDelete(step.id);
-  };
-
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-      whileHover={{ scale: 1.03 }}
-      className="group"
-    >
-      <div className="bg-linear-to-br from-custom-orange/20 to-custom-orange/5 rounded-2xl p-6 border border-custom-orange/20 hover:border-custom-orange relative">
-        <div className="absolute top-4 right-4 text-white font-bold text-lg opacity-50 group-hover:opacity-100 transition-opacity">
-          {stepNumber}
-        </div>
-        <Card className="flex flex-col h-full bg-custom-black/90 border-none shadow-none">
-          <CardHeader>
-            <CardTitle className="flex justify-between items-start">
-              <span className="flex-1">{step.title}</span>
-              <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <Button variant="outline" size="icon" onClick={handleEditClick}>
-                  <PencilIcon className="h-4 w-4" />
-                </Button>
-                <Button variant="destructive" size="icon" onClick={handleDeleteClick}>
-                  <TrashIcon className="h-4 w-4" />
-                </Button>
-              </div>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="flex-grow">
-            <p className="text-sm text-muted-foreground">{step.content}</p>
-            {step.target_selector && (
-              <div className="mt-2">
-                <Badge variant="secondary">Target: {step.target_selector}</Badge>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+    <div className="group flex items-center p-4 border-b border-gray-200 dark:border-gray-800">
+      {/* Drag Handle and Step Number */}
+      <div className="flex items-center gap-4 text-muted-foreground">
+        <GripVertical className="h-5 w-5 cursor-grab" />
+        <span className="text-lg font-medium">{String(stepNumber).padStart(2, '0')}</span>
       </div>
-    </motion.div>
+
+      {/* Step Content */}
+      <div className="flex-grow mx-6">
+        <p className="text-lg font-semibold text-card-foreground group-hover:underline">
+          {step.title}
+        </p>
+        {step.target_selector && (
+          <Badge variant="secondary" className="mt-1 font-mono">
+            {step.target_selector}
+          </Badge>
+        )}
+      </div>
+
+      {/* Action Buttons */}
+      <div className="flex gap-2">
+        <Button variant="outline" size="icon" onClick={() => onEdit(step)} className="hover:bg-custom-orange/10 hover:text-custom-orange">
+          <PencilIcon className="h-4 w-4" />
+        </Button>
+        <Button variant="outline" size="icon" onClick={() => onDelete(step.id)} className="hover:bg-custom-orange/10 hover:text-custom-orange">
+          <TrashIcon className="h-4 w-4 text-red-500" />
+        </Button>
+      </div>
+    </div>
   );
 };

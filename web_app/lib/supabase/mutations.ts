@@ -5,10 +5,10 @@ import { toast } from 'sonner';
 
 const supabase = createClient();
 
-export const createTourInDb = async (title: string, description: string): Promise<Tour | null> => {
+export const createTourInDb = async (title: string, description: string, userId: string): Promise<Tour | null> => {
   const { data, error } = await supabase
     .from('tours')
-    .insert([{ title, description, is_published: false }])
+    .insert([{ title, description, is_published: false, user_id: userId }])
     .select()
     .single();
 
