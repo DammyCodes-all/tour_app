@@ -1,7 +1,9 @@
-import { Tour, TourAnalytics, TourStep } from "./types";
-
+import { Tour, TourAnalytics, TourStep } from "@/lib/types";
 export const generateId = (): string => {
-  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+  return (
+    Math.random().toString(36).substring(2, 15) +
+    Math.random().toString(36).substring(2, 15)
+  );
 };
 
 const mockSteps: TourStep[] = [
@@ -26,7 +28,8 @@ const mockSteps: TourStep[] = [
   {
     id: generateId(),
     title: "Edit Tour Settings",
-    description: "Customize various settings for your tour, such as name and description.",
+    description:
+      "Customize various settings for your tour, such as name and description.",
     targetElement: "#edit-tour-settings",
   },
   {
@@ -38,7 +41,8 @@ const mockSteps: TourStep[] = [
   {
     id: generateId(),
     title: "Review Analytics",
-    description: "Check the performance and engagement of your published tours.",
+    description:
+      "Check the performance and engagement of your published tours.",
     targetElement: "#analytics-tab",
   },
 ];
@@ -47,9 +51,9 @@ const mockTourId = generateId();
 
 export const mockTourDetails: Tour = {
   id: mockTourId,
-  name: "Getting Started with TourApp",
+  title: "Getting Started with TourApp",
   description: "A comprehensive guide to using the TourApp dashboard features.",
-  createdAt: new Date().toISOString(),
+  created_at: new Date().toISOString(),
   status: "published",
   steps: mockSteps,
   analytics: {
@@ -66,4 +70,3 @@ export const mockTourDetails: Tour = {
     skips: 150,
   },
 };
-
