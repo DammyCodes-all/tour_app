@@ -5,7 +5,7 @@ import RotatingText from '../components/animations/rotating-text/RotatingText';
 import DecryptedText from '../components/animations/decrypted-text/DecryptedText';
 import TrustedBySection from '../components/trusted-by/TrustedBySection';
 
-export default function LandingPage() {
+const LandingPage = () => {
   return (
     <div className="min-h-screen bg-custom-black text-white font-sans">
       {/* Hero Section */}
@@ -189,3 +189,4 @@ export default function LandingPage() {
     </div>
   );
 }
+export default LandingPage;
