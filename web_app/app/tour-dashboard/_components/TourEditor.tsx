@@ -70,7 +70,6 @@ export const TourEditor = ({
         <CardContent className="space-y-4">
           <Input
             id="tour-name"
-            label="Tour Name"
             type="text"
             value={editedTour.name}
             onChange={(e) =>
@@ -83,7 +82,9 @@ export const TourEditor = ({
             </label>
             <div className="mt-1">
               <Button
-                variant={editedTour.status === "published" ? "default" : "outline"}
+                variant={
+                  editedTour.status === "published" ? "default" : "outline"
+                }
                 onClick={() => handleStatusChange("published")}
                 className="mr-2"
               >

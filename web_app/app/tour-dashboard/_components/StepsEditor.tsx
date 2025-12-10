@@ -4,20 +4,14 @@ import { useState, useEffect } from "react";
 import { TourStep } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { PlusCircle, Edit, Trash2, ArrowUp, ArrowDown } from "lucide-react";
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  PlusCircle,
-  Edit,
-  Trash2,
-  ArrowUp,
-  ArrowDown,
-} from "lucide-react";
-import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd"; // Using react-beautiful-dnd for reordering
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from "@hello-pangea/dnd"; // Using react-beautiful-dnd for reordering
 
 interface StepsEditorProps {
   tourId: string;
@@ -37,7 +31,9 @@ export const StepsEditor = ({
   onReorderSteps,
 }: StepsEditorProps) => {
   const [editingStepId, setEditingStepId] = useState<string | null>(null);
-  const [currentStep, setCurrentStep] = useState<Omit<TourStep, "id"> | TourStep>({
+  const [currentStep, setCurrentStep] = useState<
+    Omit<TourStep, "id"> | TourStep
+  >({
     title: "",
     description: "",
     targetElement: "",
@@ -90,7 +86,11 @@ export const StepsEditor = ({
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="steps">
             {(provided) => (
-              <div {...provided.droppableProps} ref={provided.innerRef} className="space-y-4">
+              <div
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                className="space-y-4"
+              >
                 {localSteps.map((step, index) => (
                   <Draggable key={step.id} draggableId={step.id} index={index}>
                     {(provided) => (
@@ -104,36 +104,48 @@ export const StepsEditor = ({
                           <div className="flex-1 space-y-2">
                             <Input
                               id={`edit-title-${step.id}`}
-                              label="Title"
                               type="text"
                               value={(currentStep as TourStep).title}
                               onChange={(e) =>
-                                setCurrentStep({ ...currentStep, title: e.target.value })
+                                setCurrentStep({
+                                  ...currentStep,
+                                  title: e.target.value,
+                                })
                               }
                             />
                             <Input
                               id={`edit-description-${step.id}`}
-                              label="Description"
                               type="text"
                               value={(currentStep as TourStep).description}
                               onChange={(e) =>
-                                setCurrentStep({ ...currentStep, description: e.target.value })
+                                setCurrentStep({
+                                  ...currentStep,
+                                  description: e.target.value,
+                                })
                               }
                             />
                             <Input
                               id={`edit-target-${step.id}`}
-                              label="Target Element Selector (CSS)"
                               type="text"
-                              value={(currentStep as TourStep).targetElement || ""}
+                              value={
+                                (currentStep as TourStep).targetElement || ""
+                              }
                               onChange={(e) =>
-                                setCurrentStep({ ...currentStep, targetElement: e.target.value })
+                                setCurrentStep({
+                                  ...currentStep,
+                                  targetElement: e.target.value,
+                                })
                               }
                             />
                             <div className="flex space-x-2">
                               <Button size="sm" onClick={handleSaveClick}>
                                 Save
                               </Button>
-                              <Button size="sm" variant="outline" onClick={handleCancelClick}>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={handleCancelClick}
+                              >
                                 Cancel
                               </Button>
                             </div>
@@ -185,7 +197,6 @@ export const StepsEditor = ({
           <h4 className="font-semibold">Add New Step</h4>
           <Input
             id="new-step-title"
-            label="Title"
             type="text"
             value={currentStep.title}
             onChange={(e) =>
@@ -194,7 +205,6 @@ export const StepsEditor = ({
           />
           <Input
             id="new-step-description"
-            label="Description"
             type="text"
             value={currentStep.description}
             onChange={(e) =>
@@ -203,7 +213,6 @@ export const StepsEditor = ({
           />
           <Input
             id="new-step-target"
-            label="Target Element Selector (optional)"
             type="text"
             value={currentStep.targetElement || ""}
             onChange={(e) =>
