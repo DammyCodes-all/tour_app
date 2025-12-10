@@ -48,7 +48,7 @@ export const getTours = async (userId: string): Promise<Tour[]> => {
   // Step 3: Manually join tours and steps in code
   const toursWithSteps = tours.map(tour => ({
       ...tour,
-      steps: steps.filter(step => step.tour_id === tour.id) || []
+      steps: (steps || []).filter(step => step.tour_id === tour.id)
   }));
 
   return toursWithSteps;

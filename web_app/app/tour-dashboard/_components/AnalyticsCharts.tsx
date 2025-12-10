@@ -1,5 +1,7 @@
 "use client";
 
+"use client";
+
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Tour } from "@/lib/types";
 import {
@@ -15,12 +17,13 @@ import {
 } from "recharts";
 import { AnalyticsEmptyState } from "./AnalyticsEmptyState";
 import { StatCard } from "./StatCard";
+import { Map, ListChecks, Target } from "lucide-react"; // Import new icons
 
 interface AnalyticsChartsProps {
   tours: Tour[];
 }
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#AF19FF"];
+const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#AF19FF", "#FF0000", "#00FF00", "#0000FF"]; // Expanded COLORS
 
 export const AnalyticsCharts = ({ tours }: AnalyticsChartsProps) => {
   if (tours.length === 0) {
@@ -43,9 +46,9 @@ export const AnalyticsCharts = ({ tours }: AnalyticsChartsProps) => {
     <div className="space-y-4">
       {/* Row for Stat Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <StatCard title="Total Tours" value={totalTours} />
-        <StatCard title="Total Steps" value={totalSteps} />
-        <StatCard title="Avg Steps per Tour" value={averageSteps.toFixed(1)} />
+        <StatCard title="Total Tours" value={totalTours} Icon={Map} />
+        <StatCard title="Total Steps" value={totalSteps} Icon={ListChecks} />
+        <StatCard title="Avg Steps per Tour" value={averageSteps.toFixed(1)} Icon={Target} />
       </div>
 
       {/* Row for Bar Chart */}
@@ -65,7 +68,13 @@ export const AnalyticsCharts = ({ tours }: AnalyticsChartsProps) => {
                 <YAxis type="number" />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="steps">
+                <Bar
+                  dataKey="steps"
+                  isAnimationActive={false} // Disable animation
+                  barSize={150} // Give explicit bar size
+                  stroke="rgba(0,0,0,0.5)" // Add a stroke
+                  strokeWidth={1}
+                >
                   {stepsPerTourData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
