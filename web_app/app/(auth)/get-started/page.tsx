@@ -1,9 +1,12 @@
-import React from 'react'
-
+"use client";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 const GetStarted = () => {
-  return (
-    <div>Get Started</div>
-  )
-}
+  const router = useRouter();
+  useEffect(() => {
+    router.replace("/tour-dashboard");
+  }, [router]);
+  return <div></div>;
+};
 
-export default GetStarted
+export default GetStarted;

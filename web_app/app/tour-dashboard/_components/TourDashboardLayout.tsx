@@ -21,7 +21,7 @@ export const TourDashboardLayout = ({ children }: DashboardLayoutProps) => {
 
   return (
     <div className="grid min-h-screen w-full lg:grid-cols-[280px_1fr]">
-      <div className="hidden border-r border-[#4a4a4a] bg-muted/40 lg:block max-h-screen">
+      <div className="hidden border-r border-[#4a4a4a] bg-muted/40 lg:block lg:sticky lg:top-0 lg:h-screen">
         <div className="flex h-full max-h-screen flex-col gap-2">
           <div className="flex h-14 items-center px-4 lg:h-[60px] lg:px-6">
             <div className="flex items-center">
@@ -69,7 +69,10 @@ export const TourDashboardLayout = ({ children }: DashboardLayoutProps) => {
                 <span className="sr-only">Toggle navigation menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="flex flex-col bg-background">
+            <SheetContent
+              side="left"
+              className="flex flex-col bg-background h-full"
+            >
               <nav className="grid gap-2 text-lg font-medium px-5 py-4">
                 <Link
                   href="/"
@@ -92,7 +95,7 @@ export const TourDashboardLayout = ({ children }: DashboardLayoutProps) => {
                   Tours
                 </Link>
               </nav>
-              <div className="px-5 pb-5">
+              <div className="px-5 pb-5 mt-auto">
                 <Button
                   className="w-full bg-custom-orange text-white px-4 py-2 rounded hover:bg-custom-orange-dark duration-200 transition-colors font-medium flex items-center justify-center gap-2"
                   onClick={handleLogout}
@@ -108,7 +111,7 @@ export const TourDashboardLayout = ({ children }: DashboardLayoutProps) => {
             </Link>
           </div>
         </header>
-        <main className="flex flex-1 flex-col gap-4 px-6 py-4 lg:gap-6 lg:p-6 mx-auto w-full max-w-7xl overflow-y-scroll max-h-screen scrollbar-hidden">
+        <main className="flex flex-1 flex-col gap-4 px-4 py-4 sm:px-6 md:px-8 lg:gap-6 lg:p-6 mx-auto w-full max-w-7xl min-w-0 overflow-auto max-h-dvh scrollbar-hidden pb-20">
           {children}
         </main>
       </div>

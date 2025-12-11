@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tourify — Test UI</title>
+
+    <style>
+        :root {
+            --bg1: #0f1724;
+            --bg2: #071023;
+            --card: #0f1724;
+            --accent: #ff7a18;
+            --muted: #94a3b8;
+            --glass: rgba(255, 255, 255, 0.03);
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            background: radial-gradient(1200px 600px at 10% 10%, rgba(255, 122, 24, 0.06), transparent),
+                linear-gradient(180deg, var(--bg1) 0%, var(--bg2) 100%);
+            color: #e6eef8;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .wrap {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 48px 20px;
+            box-sizing: border-box;
+            gap: 28px;
+        }
+
+        .panel {
+            width: 980px;
+            max-width: 100%;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 14px;
+            padding: 28px;
+            box-shadow: 0 6px 30px rgba(2, 6, 23, 0.6);
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 20px;
+            align-items: start;
+            animation: fadeInUp .5s ease both;
+        }
+
+        header.hero {
+            margin-bottom: 8px;
+        }
+
+        h1 {
+            margin: 0 0 8px 0;
+            font-size: 20px;
+            letter-spacing: -0.2px;
+            color: #fff;
+        }
+
+        p.lead {
+            margin: 0;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        /* Tiles column */
+        .tiles {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .tile {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0.00));
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            padding: 14px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            transition: transform .16s ease, box-shadow .16s ease;
+            cursor: pointer;
+            min-height: 86px;
+            box-sizing: border-box;
+            backdrop-filter: blur(4px);
+            animation: fadeIn .45s ease both;
+        }
+
+        .tile:focus,
+        .tile:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 30px rgba(2, 6, 23, 0.6);
+            outline: none;
+            border-color: rgba(255, 122, 24, 0.18);
+        }
+
+        .tile .title {
+            font-weight: 600;
+            font-size: 14px;
+            color: #fff;
+        }
+
+        .tile .desc {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        /* Right column demo box */
+        .demo {
+            background: linear-gradient(180deg, rgba(255, 122, 24, 0.04), rgba(255, 122, 24, 0.01));
+            border-radius: 10px;
+            padding: 16px;
+            border: 1px solid rgba(255, 122, 24, 0.06);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: flex-start;
+            justify-content: center;
+            min-height: 200px;
+            animation: fadeIn .55s ease both;
+        }
+
+        .demo h4 {
+            margin: 0;
+            font-size: 13px;
+            color: #fff;
+        }
+
+        .demo p {
+            margin: 0;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        /* small helpers */
+        .muted {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .cta {
+            margin-top: 12px;
+            display: flex;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            background: linear-gradient(180deg, #0b1220, #071025);
+            color: #fff;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .btn.secondary {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        /* individual tile colors via ids kept intact */
+        #add_tour {
+            --accentColor: linear-gradient(90deg, #ff8a2b, #ff5a7a);
+        }
+
+        #edit_tour {
+            --accentColor: linear-gradient(90deg, #4b9eff, #7fe0ff);
+        }
+
+        #delete_tour {
+            --accentColor: linear-gradient(90deg, #ff5a5a, #ffb36b);
+        }
+
+        #tour {
+            --accentColor: linear-gradient(90deg, #8d6bff, #5ad0ff);
+        }
+
+        #home_btn {
+            --accentColor: linear-gradient(90deg, #3ee08a, #1fbf6a);
+        }
+
+        /* apply small accent bar */
+        .tile::before {
+            content: "";
+            height: 4px;
+            width: 44px;
+            border-radius: 3px;
+            background: linear-gradient(90deg, #777, #333);
+            margin-bottom: 6px;
+            opacity: .95;
+        }
+
+        #add_tour::before {
+            background: linear-gradient(90deg, #ff8a2b, #ff5a7a);
+        }
+
+        #edit_tour::before {
+            background: linear-gradient(90deg, #4b9eff, #7fe0ff);
+        }
+
+        #delete_tour::before {
+            background: linear-gradient(90deg, #ff5a5a, #ffb36b);
+        }
+
+        #tour::before {
+            background: linear-gradient(90deg, #8d6bff, #5ad0ff);
+        }
+
+        #home_btn::before {
+            background: linear-gradient(90deg, #3ee08a, #1fbf6a);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(.995);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width:880px) {
+            .panel {
+                grid-template-columns: 1fr;
+            }
+
+            .tiles {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <main class="panel" role="main" aria-labelledby="pageTitle">
+            <section>
+                <header class="hero">
+                    <h1 id="pageTitle">Tourify — Test Controls</h1>
+                    <p class="lead">Quick UI for creating and managing sample tours. IDs are preserved for integration
+                        tests or script hooks.</p>
+                </header>
+
+                <div class="tiles" aria-hidden="false">
+                    <!-- keep ids intact while enriching content -->
+                    <div id="add_tour" class="tile" role="button" tabindex="0" aria-pressed="false">
+                        <div class="title">Add Tour</div>
+                        <div class="desc">Create a new guided tour — configure steps, selectors, and content to onboard
+                            users.</div>
+                    </div>
+
+                    <div id="edit_tour" class="tile" role="button" tabindex="0" aria-pressed="false">
+                        <div class="title">Edit Tour</div>
+                        <div class="desc">Open the editor to update steps, reorder them, or change targeting for an
+                            existing tour.</div>
+                    </div>
+
+                    <div id="delete_tour" class="tile" role="button" tabindex="0" aria-pressed="false">
+                        <div class="title">Delete Tour</div>
+                        <div class="desc">Remove a tour permanently. Use with caution — this cannot be undone from this
+                            demo UI.</div>
+                    </div>
+
+                    <div id="tour" class="tile" role="button" tabindex="0" aria-pressed="false">
+                        <div class="title">View Tour</div>
+                        <div class="desc">Preview the tour in context to verify steps, placement, and copy before
+                            publishing.</div>
+                    </div>
+
+                    <div id="home_btn" class="tile" role="button" tabindex="0" aria-pressed="false">
+                        <div class="title">Home</div>
+                        <div class="desc">Return to dashboard or landing page. This keeps navigation consistent for
+                            tests.</div>
+                    </div>
+                </div>
+            </section>
+
+            <aside class="demo" aria-label="Demo panel">
+                <h4>Demo Actions</h4>
+                <p class="muted">Use the controls on the left to simulate common tour operations. Each tile preserves
+                    its original id for script targeting.</p>
+
+                <div class="cta" aria-hidden="true">
+                    <div class="btn" id="previewBtn">Preview</div>
+                    <div class="btn secondary" id="resetBtn">Reset</div>
+                </div>
+            </aside>
+        </main>
+    </div>
+    <script src="https://noebaxzcqhhsnzzlclqg.supabase.co/storage/v1/object/public/tourify/v1/widget.iife.js"
+        data-tour-id="505cd0d2-33c4-49ac-8d45-2a07522cb29a"></script>
+    <!-- <script>
+        // small demo interactions (optional) — does not change ids
+        document.querySelectorAll('.tile').forEach(el => {
+            el.addEventListener('click', () => {
+                el.animate([{ transform: 'translateY(0)' }, { transform: 'translateY(-6px)' }, { transform: 'translateY(0)' }], { duration: 240 });
+                el.setAttribute('aria-pressed', 'true');
+            });
+            el.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    el.click();
+                }
+            });
+        });
+
+        // wire demo buttons
+        document.getElementById('previewBtn')?.addEventListener('click', () => {
+            alert('Previewing tour (demo). Use tile elements for specific actions.');
+        });
+        document.getElementById('resetBtn')?.addEventListener('click', () => {
+            document.querySelectorAll('.tile').forEach(t => t.setAttribute('aria-pressed', 'false'));
+        });
+    </script> -->
+</body>
+
+</html>

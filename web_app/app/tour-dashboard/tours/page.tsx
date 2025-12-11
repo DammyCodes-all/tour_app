@@ -8,10 +8,13 @@ import { Toaster } from "@/components/ui/sonner"; // For sonner toasts
 import { TourCard } from "./_components/TourCard";
 import { AddTourModal } from "./_components/AddTourModal";
 import { DeleteTourConfirmation } from "./_components/DeleteTourConfirmation";
+import Loading from "./loading";
 
 export default function UserToursPage() {
   const {
     tours,
+    loading,
+    editingTour,
     isAddModalOpen,
     isDeleteConfirmOpen,
     tourToDelete,
@@ -23,8 +26,10 @@ export default function UserToursPage() {
     deleteTour,
   } = useUserTours();
 
-  // Filter tours if needed (e.g., current user's tours vs. all)
-  // For now, we display all tours from the mock data
+  if (loading) {
+    return <Loading />;
+  }
+
   const displayedTours = tours;
 
   const currentTourToDelete = tours.find((t) => t.id === tourToDelete);
