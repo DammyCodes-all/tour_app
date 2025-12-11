@@ -3,6 +3,7 @@ import { getTours, getAllToursAnalytics } from "@/lib/supabase/queries";
 import {
   createTourInDb,
   deleteTourInDb,
+  updateTourInDb, // Re-imported
 } from "@/lib/supabase/mutations";
 import { useAuth } from "@/context/AuthProvider";
 import { Tour, TourAnalytics } from "@/lib/types";
@@ -34,6 +35,7 @@ export const useUserTours = () => {
   const [tours, setTours] = useState<Tour[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [editingTour, setEditingTour] = useState<Tour | null>(null); // Re-introduced
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [tourToDelete, setTourToDelete] = useState<string | null>(null);
@@ -88,6 +90,9 @@ export const useUserTours = () => {
   const openAddModal = () => setIsAddModalOpen(true);
   const closeAddModal = () => setIsAddModalOpen(false);
 
+  const openEditModal = (tour: Tour) => setEditingTour(tour); // Re-introduced
+  const closeEditModal = () => setEditingTour(null); // Re-introduced
+
   const openDeleteConfirm = (tourId: string) => {
     setIsDeleteConfirmOpen(true);
     setTourToDelete(tourId);
@@ -126,6 +131,23 @@ export const useUserTours = () => {
     }
   };
 
+  const updateTour = async (updatedTour: Tour) => { // Re-introduced
+    try {
+      const result = await updateTourInDb(
+        updatedTour.id,
+        updatedTour.title || "",
+        updatedTour.description || ""
+      );
+      if (result) {
+        setTours(
+          tours.map((tour) => (tour.id === updatedTour.id ? updatedTour : tour))
+        );
+      }
+    } catch (error) {
+      toast.error("Failed to update tour.");
+    }
+  };
+
   const deleteTour = async () => {
     if (!tourToDelete) return;
     try {
@@ -154,5 +176,10 @@ export const useUserTours = () => {
     closeDeleteConfirm,
     createTour,
     deleteTour,
+    editingTour, // Re-returned
+    openEditModal, // Re-returned
+    closeEditModal, // Re-returned
+    updateTour, // Re-returned
   };
 };
+
