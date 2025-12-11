@@ -14,7 +14,6 @@ export default function UserToursPage() {
   const {
     tours,
     loading,
-    editingTour,
     isAddModalOpen,
     isDeleteConfirmOpen,
     tourToDelete,
@@ -52,7 +51,10 @@ export default function UserToursPage() {
             </p>
           ) : (
             displayedTours.map((tour) => (
-              <div key={tour.id} className="w-full md:w-1/2 lg:w-1/2 xl:w-1/3 px-4 mb-8">
+              <div
+                key={tour.id}
+                className="w-full md:w-1/2 lg:w-1/2 xl:w-1/3 px-4 mb-8"
+              >
                 <TourCard
                   tour={tour}
                   // onEdit prop is no longer passed as TourCard handles navigation directly
