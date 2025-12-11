@@ -5,25 +5,17 @@ import { useUserTours } from "@/hooks/useUserTours";
 import { AnalyticsCharts } from "./_components/AnalyticsCharts";
 import { TourSearchBar } from "./_components/TourSearchBar";
 import { CurrentUserToursTable } from "./_components/CurrentUserToursTable";
-import { TourEditor } from "./_components/TourEditor";
 import { DeleteTourConfirmation } from "./tours/_components/DeleteTourConfirmation";
 
 export default function TourDashboardPage() {
   const {
     tours,
     loading,
-    editingTour,
-    openEditModal,
-    closeEditModal,
     openDeleteConfirm,
     isDeleteConfirmOpen,
     tourToDelete,
     closeDeleteConfirm,
     deleteTour,
-    updateTour,
-    addStep,
-    updateStep,
-    deleteStep,
   } = useUserTours();
 
   const [searchQuery, setSearchQuery] = useState("");
