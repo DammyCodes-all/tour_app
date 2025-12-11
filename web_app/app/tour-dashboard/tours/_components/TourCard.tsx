@@ -10,10 +10,11 @@ import { Edit, Trash2, CheckCircle, MapPinCheckInside } from "lucide-react"; // 
 
 interface TourCardProps {
   tour: Tour;
-  onDelete: (tourId: string) => void; // Removed onEdit prop
+  onEdit: (tour: Tour) => void; // Re-introduced onEdit prop
+  onDelete: (tourId: string) => void;
 }
 
-export const TourCard = ({ tour, onDelete }: TourCardProps) => { // Removed onEdit from destructuring
+export const TourCard = ({ tour, onEdit, onDelete }: TourCardProps) => { // Re-introduced onEdit
   const router = useRouter();
 
   const handleCardClick = () => {
@@ -44,7 +45,7 @@ export const TourCard = ({ tour, onDelete }: TourCardProps) => { // Removed onEd
             size="icon"
             onClick={(e) => {
               e.stopPropagation();
-              router.push(`/tour-dashboard/tours/${tour.id}`); // Direct navigation
+              onEdit(tour); // Call onEdit prop
             }}
             className="hover:bg-custom-orange/10 hover:text-custom-orange"
           >
@@ -67,7 +68,7 @@ export const TourCard = ({ tour, onDelete }: TourCardProps) => { // Removed onEd
       {/* Footer Stats */}
       <div className="mt-auto flex items-center justify-between border-t border-custom-orange/20 pt-4 text-sm text-muted-foreground">
         <div className="flex items-center">
-          <MapPinCheckInside className="mr-2 h-4 w-4" />
+          <MapPinCheckInside className="mr-2 h-4 w-4" /> {/* Corrected icon usage */}
           <span>{tour.steps?.length || 0} Steps</span>
         </div>
         <div className="flex items-center">
