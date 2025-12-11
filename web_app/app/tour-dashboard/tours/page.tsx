@@ -7,6 +7,7 @@ import { PlusCircle } from "lucide-react";
 import { Toaster } from "@/components/ui/sonner"; // For sonner toasts
 import { TourCard } from "./_components/TourCard";
 import { AddTourModal } from "./_components/AddTourModal";
+import { EditTourModal } from "./_components/EditTourModal"; // Re-import
 import { DeleteTourConfirmation } from "./_components/DeleteTourConfirmation";
 import Loading from "./loading";
 
@@ -14,14 +15,18 @@ export default function UserToursPage() {
   const {
     tours,
     loading,
+    editingTour, // Re-introduced
     isAddModalOpen,
     isDeleteConfirmOpen,
     tourToDelete,
     openAddModal,
     closeAddModal,
+    openEditModal, // Re-introduced
+    closeEditModal, // Re-introduced
     openDeleteConfirm,
     closeDeleteConfirm,
     createTour,
+    updateTour, // Re-introduced
     deleteTour,
   } = useUserTours();
 
@@ -57,7 +62,7 @@ export default function UserToursPage() {
               >
                 <TourCard
                   tour={tour}
-                  // onEdit prop is no longer passed as TourCard handles navigation directly
+                  onEdit={openEditModal} // Passed onEdit prop
                   onDelete={openDeleteConfirm}
                 />
               </div>
@@ -70,6 +75,12 @@ export default function UserToursPage() {
         isOpen={isAddModalOpen}
         onClose={closeAddModal}
         onCreate={createTour}
+      />
+      <EditTourModal // Re-introduced
+        tour={editingTour}
+        isOpen={!!editingTour}
+        onClose={closeEditModal}
+        onUpdate={updateTour}
       />
       <DeleteTourConfirmation
         isOpen={isDeleteConfirmOpen}
