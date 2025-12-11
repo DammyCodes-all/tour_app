@@ -84,58 +84,32 @@ export default function TourDashboardPage() {
     tour.title?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleReorderSteps = (tourId: string, newOrder: any[]) => {
-    const tourToUpdate = tours.find((t) => t.id === tourId);
-    if (tourToUpdate) {
-      updateTour({ ...tourToUpdate, steps: newOrder });
-    }
-  };
-
-  const handleSelectTour = (tourId: string) => {
-    const tourToEdit = currentUserTours.find((t) => t.id === tourId);
-    if (tourToEdit) {
-      openEditModal(tourToEdit);
-    }
-  };
-
   const currentTourToDelete = tours.find((tour) => tour.id === tourToDelete);
   const tourNameToDelete = currentTourToDelete?.title || "";
 
   return (
     <>
-      {editingTour ? (
-        <TourEditor
-          tour={editingTour}
-          onUpdateTour={updateTour}
-          onAddStep={addStep}
-          onUpdateStep={updateStep}
-          onDeleteStep={deleteStep}
-          onReorderSteps={handleReorderSteps}
-          onBack={closeEditModal}
-        />
-      ) : (
-        <div className="flex flex-col gap-6 ">
-          <h1 className="text-3xl font-bold">Dashboard</h1>
+      <div className="flex flex-col gap-6 ">
+        <h1 className="text-3xl font-bold">Dashboard</h1>
 
-          <AnalyticsCharts tours={currentUserTours} />
+        <AnalyticsCharts tours={currentUserTours} />
 
-          {currentUserTours.length > 0 && (
-            <>
-              <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-semibold">Your Tours</h2>
-                <TourSearchBar onSearch={setSearchQuery} />
-              </div>
+        {currentUserTours.length > 0 && (
+          <>
+            <div className="flex justify-between items-center">
+              <h2 className="text-2xl font-semibold">Your Tours</h2>
+              <TourSearchBar onSearch={setSearchQuery} />
+            </div>
 
-              <CurrentUserToursTable
-                tours={currentUserTours}
-                onSelectTour={handleSelectTour}
-                onDeleteTour={openDeleteConfirm}
-              />
-            </>
-          )}
-        </div>
-      )}
+            <CurrentUserToursTable
+              tours={currentUserTours}
+              onDeleteTour={openDeleteConfirm}
+            />
+          </>
+        )}
+      </div>
 
+      {/* Delete Confirmation Modal */}
       <DeleteTourConfirmation
         isOpen={isDeleteConfirmOpen}
         onClose={closeDeleteConfirm}

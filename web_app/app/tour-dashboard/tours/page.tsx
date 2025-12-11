@@ -1,13 +1,13 @@
 "use client";
 
-import { TourCard } from "./_components/TourCard";
-import { AddTourModal } from "./_components/AddTourModal";
-import { EditTourModal } from "./_components/EditTourModal";
-import { DeleteTourConfirmation } from "./_components/DeleteTourConfirmation";
+import { useState } from "react";
+import { useUserTours } from "@/hooks/useUserTours";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
-import { useUserTours } from "@/hooks/useUserTours";
 import { Toaster } from "@/components/ui/sonner"; // For sonner toasts
+import { TourCard } from "./_components/TourCard";
+import { AddTourModal } from "./_components/AddTourModal";
+import { DeleteTourConfirmation } from "./_components/DeleteTourConfirmation";
 import Loading from "./loading";
 
 export default function UserToursPage() {
@@ -17,14 +17,12 @@ export default function UserToursPage() {
     editingTour,
     isAddModalOpen,
     isDeleteConfirmOpen,
+    tourToDelete,
     openAddModal,
     closeAddModal,
-    openEditModal,
-    closeEditModal,
     openDeleteConfirm,
     closeDeleteConfirm,
     createTour,
-    updateTour,
     deleteTour,
   } = useUserTours();
 
@@ -33,6 +31,9 @@ export default function UserToursPage() {
   }
 
   const displayedTours = tours;
+
+  const currentTourToDelete = tours.find((t) => t.id === tourToDelete);
+  const tourNameToDelete = currentTourToDelete?.title || "selected tour";
 
   return (
     <>
@@ -44,19 +45,20 @@ export default function UserToursPage() {
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="flex flex-wrap -mx-4">
           {displayedTours.length === 0 ? (
-            <p className="md:col-span-2 lg:col-span-3 text-center text-muted-foreground">
+            <p className="w-full text-center text-muted-foreground">
               No tours found. Create one to get started!
             </p>
           ) : (
             displayedTours.map((tour) => (
-              <TourCard
-                key={tour.id}
-                tour={tour}
-                onEdit={openEditModal}
-                onDelete={openDeleteConfirm}
-              />
+              <div key={tour.id} className="w-full md:w-1/2 lg:w-1/2 xl:w-1/3 px-4 mb-8">
+                <TourCard
+                  tour={tour}
+                  // onEdit prop is no longer passed as TourCard handles navigation directly
+                  onDelete={openDeleteConfirm}
+                />
+              </div>
             ))
           )}
         </div>
@@ -67,19 +69,11 @@ export default function UserToursPage() {
         onClose={closeAddModal}
         onCreate={createTour}
       />
-      <EditTourModal
-        tour={editingTour}
-        isOpen={!!editingTour}
-        onClose={closeEditModal}
-        onUpdate={updateTour}
-      />
       <DeleteTourConfirmation
         isOpen={isDeleteConfirmOpen}
         onClose={closeDeleteConfirm}
         onConfirm={deleteTour}
-        tourName={
-          tours.find((t) => t.id === editingTour?.id)?.title || "selected tour"
-        }
+        tourName={tourNameToDelete}
       />
       <Toaster />
     </>

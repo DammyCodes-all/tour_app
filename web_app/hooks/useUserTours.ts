@@ -2,14 +2,10 @@ import { useState, useEffect, useCallback } from "react";
 import { getTours, getAllToursAnalytics } from "@/lib/supabase/queries";
 import {
   createTourInDb,
-  updateTourInDb,
   deleteTourInDb,
-  addStepToDb,
-  updateStepInDb,
-  deleteStepInDb,
 } from "@/lib/supabase/mutations";
 import { useAuth } from "@/context/AuthProvider";
-import { Tour, TourStep, TourAnalytics } from "@/lib/types";
+import { Tour, TourAnalytics } from "@/lib/types";
 import { toast } from "sonner";
 
 // --- Helper Functions ---
@@ -38,7 +34,6 @@ export const useUserTours = () => {
   const [tours, setTours] = useState<Tour[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [editingTour, setEditingTour] = useState<Tour | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [tourToDelete, setTourToDelete] = useState<string | null>(null);
@@ -93,9 +88,6 @@ export const useUserTours = () => {
   const openAddModal = () => setIsAddModalOpen(true);
   const closeAddModal = () => setIsAddModalOpen(false);
 
-  const openEditModal = (tour: Tour) => setEditingTour(tour);
-  const closeEditModal = () => setEditingTour(null);
-
   const openDeleteConfirm = (tourId: string) => {
     setIsDeleteConfirmOpen(true);
     setTourToDelete(tourId);
@@ -134,23 +126,6 @@ export const useUserTours = () => {
     }
   };
 
-  const updateTour = async (updatedTour: Tour) => {
-    try {
-      const result = await updateTourInDb(
-        updatedTour.id,
-        updatedTour.title || "",
-        updatedTour.description || ""
-      );
-      if (result) {
-        setTours(
-          tours.map((tour) => (tour.id === updatedTour.id ? updatedTour : tour))
-        );
-      }
-    } catch (error) {
-      toast.error("Failed to update tour.");
-    }
-  };
-
   const deleteTour = async () => {
     if (!tourToDelete) return;
     try {
@@ -164,103 +139,20 @@ export const useUserTours = () => {
     }
   };
 
-  const addStep = async (tourId: string, stepData: Omit<TourStep, "id" | "step_number" | "step_id">) => {
-    try {
-      const tourIndex = tours.findIndex((t) => t.id === tourId);
-      if (tourIndex === -1) return;
-
-      const tour = tours[tourIndex];
-      const step_number = (tour.steps?.length || 0) + 1;
-      const newStep = await addStepToDb(tourId, stepData, step_number);
-
-      if (newStep) {
-        const updatedSteps = [...(tour.steps || []), newStep];
-        const updatedTour = { ...tour, steps: updatedSteps };
-        
-        const newTours = [...tours];
-        newTours[tourIndex] = updatedTour;
-
-        setTours(newTours);
-        if (editingTour?.id === tourId) {
-          setEditingTour(updatedTour);
-        }
-      }
-    } catch (error) {
-      toast.error("Failed to add step.");
-    }
-  };
-
-  const updateStep = async (tourId: string, updatedStep: TourStep) => {
-    try {
-      const result = await updateStepInDb(updatedStep);
-      if (result) {
-        const tourIndex = tours.findIndex((t) => t.id === tourId);
-        if (tourIndex === -1) return;
-
-        const tour = tours[tourIndex];
-        const updatedSteps = (tour.steps || []).map((step) =>
-          step.id === updatedStep.id ? updatedStep : step
-        );
-        const updatedTour = { ...tour, steps: updatedSteps };
-        
-        const newTours = [...tours];
-        newTours[tourIndex] = updatedTour;
-
-        setTours(newTours);
-        if (editingTour?.id === tourId) {
-          setEditingTour(updatedTour);
-        }
-      }
-    } catch (error) {
-      toast.error("Failed to update step.");
-    }
-  };
-
-  const deleteStep = async (tourId: string, stepId: string) => {
-    try {
-      const success = await deleteStepInDb(stepId);
-      if (success) {
-        const tourIndex = tours.findIndex((t) => t.id === tourId);
-        if (tourIndex === -1) return;
-        
-        const tour = tours[tourIndex];
-        const updatedSteps = (tour.steps || []).filter((step) => step.id !== stepId);
-        const updatedTour = { ...tour, steps: updatedSteps };
-
-        const newTours = [...tours];
-        newTours[tourIndex] = updatedTour;
-
-        setTours(newTours);
-        if (editingTour?.id === tourId) {
-          setEditingTour(updatedTour);
-        }
-      }
-    } catch (error) {
-      toast.error("Failed to delete step.");
-    }
-  };
-
   // --- Return Values ---
 
   return {
     tours,
     loading,
     error,
-    editingTour,
     isAddModalOpen,
     isDeleteConfirmOpen,
     tourToDelete,
     openAddModal,
     closeAddModal,
-    openEditModal,
-    closeEditModal,
     openDeleteConfirm,
     closeDeleteConfirm,
     createTour,
-    updateTour,
     deleteTour,
-    addStep,
-    updateStep,
-    deleteStep,
   };
 };

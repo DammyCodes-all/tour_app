@@ -10,8 +10,9 @@ import {
   TableBody,
   TableCell,
 } from "@/components/ui/table";
-import { Edit, Trash2, Eye } from "lucide-react";
+import { Edit, Trash2 } from "lucide-react";
 import { format } from "date-fns";
+import Link from "next/link";
 import {
   Tooltip,
   TooltipContent,
@@ -21,13 +22,11 @@ import {
 
 interface CurrentUserToursTableProps {
   tours: Tour[];
-  onSelectTour: (tourId: string) => void;
   onDeleteTour: (tourId: string) => void;
 }
 
 export const CurrentUserToursTable = ({
   tours,
-  onSelectTour,
   onDeleteTour,
 }: CurrentUserToursTableProps) => {
   return (
@@ -64,13 +63,11 @@ export const CurrentUserToursTable = ({
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => onSelectTour(tour.id)}
-                    >
-                      <Edit className="h-4 w-4" />
-                      <span className="sr-only">Edit Tour</span>
+                    <Button asChild variant="ghost" size="icon">
+                      <Link href={`/tour-dashboard/tours/${tour.id}`}>
+                        <Edit className="h-4 w-4" />
+                        <span className="sr-only">Edit Tour</span>
+                      </Link>
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
@@ -90,17 +87,6 @@ export const CurrentUserToursTable = ({
                   </TooltipTrigger>
                   <TooltipContent>
                     <p>Delete Tour</p>
-                  </TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button variant="ghost" size="icon">
-                      <Eye className="h-4 w-4" />
-                      <span className="sr-only">Preview Tour</span>
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Preview Tour</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
